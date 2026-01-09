@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="page-header d-print-none p-0 mb-3" aria-label="Page header">
-                <div class="container-xl">
+                <div>
                     <div class="row g-2 align-items-center">
                         <div class="col">
                             <h1 style="font-size: 30px;"><span x-text="title">{{ service.name }}</span></h1>
@@ -12,16 +12,16 @@
                         <div class="col-auto ms-auto d-print-none">
                             <div class="btn-list">
                                 <span class="d-none d-sm-inline">
-                                    <a href="#" class="btn btn-md" onclick="startService('{{ service.unit }}')">
+                                    <a class="btn btn-md" onclick="startService('{{ service.unit }}')">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4v16l13 -8l-13 -8" /></svg>
                                         Start
                                     </a>
-                                    <a href="#" class="btn btn-md" onclick="stopService('{{ service.unit }}')">
+                                    <a class="btn btn-md" onclick="stopService('{{ service.unit }}')">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-player-stop"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /></svg>
                                         Stop
                                     </a>
-                                    <a href="#" class="btn btn-md btn-primary" onclick="restartService('{{ service.unit }}')">
-                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-repeat"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3" /><path d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3" /></svg>
+                                    <a class="btn btn-md btn-primary" onclick="restartService('{{ service.unit }}')">
+                                        <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-repeat"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3" /><path d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3" /></svg>
                                         Restart
                                     </a>
                                 </span>
@@ -72,7 +72,7 @@
                 .then(r => r.text())
                 .then(text => {
                     logBox.textContent = text;
-                    logBox.scrollTop = logBox.scrollHeight; // <-- scroll en bas
+                    logBox.scrollTop = logBox.scrollHeight;
                 });
         }, 2000);
     }
