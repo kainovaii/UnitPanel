@@ -55,7 +55,7 @@ public class SQLite
         )
         """);
         Base.exec("""
-        CREATE TABLE IF NOT EXISTS apps (
+        CREATE TABLE IF NOT EXISTS services (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE,
             unit TEXT NOT NULL UNIQUE,
