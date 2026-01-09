@@ -1,0 +1,9 @@
+<div class="skill-card bg-bg-card border border-border-color rounded-2xl p-8 transition-all duration-300 hover:border-accent-tertiary hover:shadow-2xl hover:shadow-accent-tertiary/20 animate-on-scroll">
+    <div class="w-16 h-16 bg-gradient-to-r from-accent-main to-accent-tertiary rounded-xl flex items-center justify-center text-2xl mb-6" x-text="icon"></div>
+    <h3 class="text-xl font-semibold mb-4" x-text="title"></h3>
+    <div class="flex flex-wrap gap-2">
+        <template x-for="(tool, index) in tools" :key="index">
+            <span class="bg-bg-secondary text-text-secondary px-4 py-2 rounded-full text-sm border border-border-color" x-text="tool"></span>
+        </template>
+    </div>
+</div>

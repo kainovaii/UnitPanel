@@ -1,0 +1,39 @@
+.bg-gradient-custom {
+    background: radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 100, 255, 0.1) 0%, transparent 50%);
+}
+
+.text-gradient {
+    background: linear-gradient(45deg, #00ff88, #ff0080);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.btn-gradient {
+    background: linear-gradient(45deg, #00ff88, #ff0080);
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+}
+
+.animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.code-line {
+    transition: all 0.5s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+}

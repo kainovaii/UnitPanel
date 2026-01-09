@@ -1,0 +1,54 @@
+{% for skill in skills %}
+<div class="modal" id="editSkillModal-{{ skill.id }}" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="/api/skills/update" method="POST">
+                <input type="hidden" name="id" value="{{ skill.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit ({{ skill.title }})</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="icon" class="form-label">Icon:</label>
+                                <input id="icon" type="text" class="form-control" name="icon" placeholder="Enter icon...." value="{{ skill.icon }}">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="title" class="form-label">Title:</label>
+                                <input  id="title" type="text" class="form-control" name="title" placeholder="Enter title...." value="{{ skill.title }}">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mt-2">
+                                <label class="form-label">Tools:</label>
+
+                                <div x-data="{ tools: '{{ skill.tools }}'.replace('[','').replace(']','').split(',').map(t => t.trim()) }">
+
+                                    <template x-for="(tool, index) in tools" :key="index">
+                                        <div class="d-flex mb-2">
+                                            <input class="form-control me-2" type="text" x-model="tools[index]" name="tools[]" placeholder="Enter tool....">
+                                            <button type="button" class="btn btn-danger" @click="tools.splice(index, 1)">Supprimer</button>
+                                        </div>
+                                    </template>
+
+                                    <button type="button" class="btn btn-primary mt-2" @click="tools.push('')">
+                                        Ajouter un outil
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"  data-bs-dismiss="modal">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}

@@ -1,0 +1,60 @@
+<div class="modal" id="createProjectModal" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="/api/projects/create" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="icon" class="form-label">Icon:</label>
+                                <input id="icon" type="text" class="form-control" name="icon" placeholder="Enter icon....">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="title" class="form-label">Title:</label>
+                                <input  id="title" type="text" class="form-control" name="title" placeholder="Enter title....">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="description" class="form-label">Description:</label>
+                                <textarea id="description" type="text" class="form-control" name="description" placeholder="Enter text...."></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-2">
+                                <label for="link" class="form-label">Link:</label>
+                                <input  id="link" type="text" class="form-control" name="link" placeholder="Enter link....">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="mt-2">
+                                <label class="form-label">Tools:</label>
+
+                                <div x-data="{ tools: [''] }">
+                                    <template x-for="(tool, index) in tools" :key="index">
+                                        <input class="form-control mb-2" type="text" x-model="tools[index]" name="tools[]" placeholder="Enter tool....">
+                                    </template>
+                                    <button type="button" class="btn btn-primary mt-2"
+                                            @click="tools.push('')">
+                                        Ajouter un outil
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"  data-bs-dismiss="modal">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
