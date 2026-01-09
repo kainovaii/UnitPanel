@@ -55,22 +55,13 @@ public class SQLite
         )
         """);
         Base.exec("""
-        CREATE TABLE IF NOT EXISTS skills (
+        CREATE TABLE IF NOT EXISTS apps (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            icon TEXT NOT NULL UNIQUE,
-            title TEXT NOT NULL,
-            tools TEXT NOT NULL
-        )
-        """);
-        Base.exec("""
-        CREATE TABLE IF NOT EXISTS projects (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            icon TEXT NOT NULL UNIQUE,
-            title TEXT NOT NULL,
-            description TEXT NOT NULL,
-            link TEXT NOT NULL,
-            tools TEXT NOT NULL
-        )
+            name TEXT NOT NULL UNIQUE,
+            unit TEXT NOT NULL UNIQUE,
+            description TEXT,
+            autostart BOOLEAN DEFAULT 0
+        );
         """);
         Base.exec("""
         CREATE TABLE IF NOT EXISTS settings (
