@@ -40,7 +40,7 @@ Voici un aperçu de mon portfolio :
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/ton-username/UnitPanel.git
+git clone https://github.com/kainovaii/UnitPanel.git
 cd UnitPanel
 ./build.sh
 ```
