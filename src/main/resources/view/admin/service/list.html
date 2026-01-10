@@ -12,12 +12,11 @@
                         </div>
                         <div class="col-auto ms-auto d-print-none">
                             <div class="btn-list">
-                                <span class="d-none d-sm-inline">
-                                    <a class="btn btn-md" data-bs-toggle="modal" data-bs-target="#createServiceModal" href="#">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                                        New service
-                                    </a>
-                                </span>
+                            <span class="d-none d-sm-inline">
+                                <a class="btn btn-md" data-bs-toggle="modal" data-bs-target="#createServiceModal" href="#">
+                                    New service
+                                </a>
+                            </span>
                             </div>
                         </div>
                     </div>
@@ -25,11 +24,11 @@
             </div>
         </div>
         <div class="col-md-12">
-            <div class="row" id="services-container">
+            <div class="row">
                 {% for service in services %}
-                <div class="col-md-4 mb-3">
-                    <div class="card card-sm card-link card-link-pop" data-service-unit="{{ service.unit }}">
-                        <div class="card-status-top service-status-indicator bg-secondary" data-status="loading"></div>
+                <div class="col-md-4" x-data="serviceCard('{{ service.unit }}')" x-init="init()">
+                    <div class="card card-sm card-link card-link-pop">
+                        <div class="card-status-top" :class="`bg-${getColor(status)}`"></div>
                         <div class="card-body">
                             <h3 class="card-title text-capitalize">{{ service.name }}</h3>
                             <ul class="list-unstyled space-y-1">
@@ -43,12 +42,10 @@
                                 </li>
                             </ul>
                             <div class="mt-4">
-                                <div class="row align-items-center">
-                                    <div class="col service-status-text text-secondary">
-                                        <span class="service-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /></svg>
-                                        </span>
-                                        <span class="service-status-label">Loading...</span>
+                                <div class="row">
+                                    <div class="col text-secondary" :class="`text-${getColor(status)}`">
+                                        <span x-html="getIcon(status)"></span>
+                                        <span x-text="getLabel(status)"></span>
                                     </div>
                                     <div class="col-auto text-secondary">
                                         <a class="link-secondary" href="/admin/services/{{ service.id }}/console">
@@ -72,23 +69,6 @@
     {% include "./partials/create-modal.html" %}
 </div>
 <style>
-    .service-status-indicator {
-        height: 4px;
-        transition: background-color 0.3s ease;
-    }
-
-    .service-icon {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 0.5rem;
-    }
-
-    .service-status-text {
-        display: flex;
-        align-items: center;
-        font-weight: 500;
-    }
-
     .card-link-pop {
         transition: all 0.3s ease;
         border: 1px solid rgba(0,0,0,0.05);
@@ -99,171 +79,67 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         border-color: rgba(0,0,0,0.1);
     }
-
-    .service-status-label {
-        font-size: 0.875rem;
-        font-weight: 500;
-    }
-
-    .btn-list {
-        gap: 0.25rem;
-    }
-
-    .service-status-indicator[data-status="loading"] {
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-
-    .text-success-custom {
-        color: #2ecc71 !important;
-    }
-
-    .text-danger-custom {
-        color: #e74c3c !important;
-    }
-
-    .text-warning-custom {
-        color: #f39c12 !important;
-    }
 </style>
 <script>
-    const icons = {
-        active: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-success">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M9 12l2 2l4 -4" />
-        </svg>`,
+    function serviceCard(unit) {
+        return {
+            unit: unit,
+            status: 'loading',
+            interval: null,
 
-        inactive: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-danger">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M9 9l6 6" />
-            <path d="M15 9l-6 6" />
-        </svg>`,
+            init() {
+                // Charger le statut immédiatement
+                this.updateStatus();
 
-        failed: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-danger">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-            <path d="M12 8l0 4" />
-            <path d="M12 16l.01 0" />
-        </svg>`,
+                // Mettre à jour toutes les 5 secondes
+                this.interval = setInterval(() => {
+                    this.updateStatus();
+                }, 5000);
+            },
 
-        activating: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-warning">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 3a9 9 0 1 0 9 9" />
-        </svg>`,
+            async updateStatus() {
+                try {
+                    const response = await fetch(`/api/systemd/${this.unit}/status`);
+                    const data = await response.json();
+                    this.status = data.status.trim();
+                } catch (error) {
+                    console.error('Error fetching status for', this.unit, ':', error);
+                    this.status = 'error';
+                }
+            },
 
-        loading: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-        </svg>`
-    };
+            getColor(status) {
+                if (status === 'active') return 'success';
+                if (['inactive', 'dead', 'failed'].includes(status)) return 'danger';
+                if (['activating', 'deactivating', 'reloading'].includes(status)) return 'warning';
+                return 'secondary';
+            },
 
-    const labels = {
-        active: 'Running',
-        inactive: 'Stopped',
-        failed: 'Failed',
-        activating: 'Starting...',
-        deactivating: 'Stopping...',
-        reloading: 'Reloading...',
-        dead: 'Dead',
-        unknown: 'Unknown'
-    };
+            getLabel(status) {
+                const labels = {
+                    active: 'Running',
+                    inactive: 'Stopped',
+                    failed: 'Failed',
+                    dead: 'Dead',
+                    activating: 'Starting...',
+                    deactivating: 'Stopping...',
+                    reloading: 'Reloading...',
+                    loading: 'Loading...',
+                    error: 'Error'
+                };
+                return labels[status] || status;
+            },
 
-    async function updateServiceStatus(card) {
-        const unit = card.dataset.serviceUnit;
-
-        try {
-            const response = await fetch(`/api/systemd/${unit}/status`);
-            const data = await response.json();
-            const status = data.status.trim();
-
-            const indicator = card.querySelector('.service-status-indicator');
-            const statusText = card.querySelector('.service-status-text');
-            const iconSpan = card.querySelector('.service-icon');
-            const labelSpan = card.querySelector('.service-status-label');
-
-            indicator.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-secondary', 'bg-info');
-            statusText.classList.remove('text-success', 'text-danger', 'text-warning', 'text-secondary', 'text-info');
-
-            let icon = icons.loading;
-            let label = labels.unknown;
-            let colorClass = 'secondary';
-
-            switch(status) {
-                case 'active':
-                    icon = icons.active;
-                    label = labels.active;
-                    colorClass = 'success';
-                    break;
-
-                case 'inactive':
-                case 'dead':
-                    icon = icons.inactive;
-                    label = status === 'dead' ? labels.dead : labels.inactive;
-                    colorClass = 'danger';
-                    break;
-
-                case 'failed':
-                    icon = icons.failed;
-                    label = labels.failed;
-                    colorClass = 'danger';
-                    break;
-
-                case 'activating':
-                case 'reloading':
-                    icon = icons.activating;
-                    label = labels[status];
-                    colorClass = 'warning';
-                    break;
-
-                case 'deactivating':
-                    icon = icons.activating;
-                    label = labels.deactivating;
-                    colorClass = 'warning';
-                    break;
-
-                default:
-                    icon = icons.loading;
-                    label = status.charAt(0).toUpperCase() + status.slice(1);
-                    colorClass = 'info';
+            getIcon(status) {
+                const icons = {
+                    active: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>',
+                    inactive: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-progress-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 20.777a8.942 8.942 0 0 1 -2.48 -.969" /><path d="M14 3.223a9.003 9.003 0 0 1 0 17.554" /><path d="M4.579 17.093a8.961 8.961 0 0 1 -1.227 -2.592" /><path d="M3.124 10.5c.16 -.95 .468 -1.85 .9 -2.675l.169 -.305" /><path d="M6.907 4.579a8.954 8.954 0 0 1 3.093 -1.356" /><path d="M14 14l-4 -4" /><path d="M10 14l4 -4" /></svg>',
+                    failed: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 8l0 4" /><path d="M12 16l.01 0" /></svg>',
+                    loading: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /></svg>'
+                };
+                return icons[status] || icons.loading;
             }
-
-            indicator.classList.add(`bg-${colorClass}`);
-            statusText.classList.add(`text-${colorClass}`);
-            iconSpan.innerHTML = icon;
-            labelSpan.textContent = label;
-            indicator.dataset.status = status;
-
-        } catch (error) {
-            console.error('Error fetching status for', unit, ':', error);
-
-            const indicator = card.querySelector('.service-status-indicator');
-            const statusText = card.querySelector('.service-status-text');
-            const iconSpan = card.querySelector('.service-icon');
-            const labelSpan = card.querySelector('.service-status-label');
-
-            indicator.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
-            indicator.classList.add('bg-secondary');
-            statusText.classList.add('text-secondary');
-            iconSpan.innerHTML = icons.loading;
-            labelSpan.textContent = 'Error';
         }
     }
-
-    function updateAllStatuses() {
-        const cards = document.querySelectorAll('[data-service-unit]');
-        cards.forEach(card => updateServiceStatus(card));
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        updateAllStatuses();
-    });
-
-    setInterval(updateAllStatuses, 5000);
 </script>
 {% endblock %}
