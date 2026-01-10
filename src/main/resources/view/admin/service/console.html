@@ -1,46 +1,100 @@
 {% extends "layout/admin.html" %}
 {% block content %}
 <div class="container" x-data="serviceConsole('{{ service.unit }}')" x-init="init()">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="page-header d-print-none p-0 mb-3" aria-label="Page header">
-                <div>
-                    <div class="row g-2 align-items-center">
-                        <div class="col">
-                            <div class="page-pretitle">Services</div>
-                            <h2 class="page-title text-capitalize">{{ service.name }}</h2>
-                        </div>
-                        <div class="col-auto ms-auto d-print-none">
-                            <div class="btn-list">
+    <div class="col-md-12">
+        <div class="page-header d-print-none p-0 mb-3" aria-label="Page header">
+            <div>
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <div class="page-pretitle">Services</div>
+                        <h2 class="page-title text-capitalize">{{ service.name }}</h2>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
                                 <span class="d-none d-sm-inline">
-                                    <a class="btn btn-md" @click="startService()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4v16l13 -8l-13 -8" /></svg>
-                                        Start
-                                    </a>
-                                    <a class="btn btn-md" @click="stopService()">
-                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-player-stop"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /></svg>
-                                        Stop
-                                    </a>
-                                    <a class="btn btn-md" @click="restartService()">
-                                        <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-repeat"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3" /><path d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3" /></svg>
-                                        Restart
-                                    </a>
                                     <a class="btn btn-md" data-bs-toggle="modal" data-bs-target="#settingsServiceModal">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg>
                                         Settings
                                     </a>
                                 </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="col-md-12">
+                <a class="btn btn-md w-100" @click="startService()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-player-play"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 4v16l13 -8l-13 -8" /></svg>
+                    Start
+                </a>
+            </div>
+            <div class="col-md-12 mt-2">
+                <a class="btn btn-md w-100" @click="stopService()">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-player-stop"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 5m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" /></svg>
+                    Stop
+                </a>
+            </div>
+            <div class="col-md-12 mt-2">
+                <a class="btn btn-md w-100" @click="restartService()">
+                    <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-repeat"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3" /><path d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3" /></svg>
+                    Restart
+                </a>
+            </div>
+            <div class="col-md-12 mt-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="subheader">RAM</div>
+                            <div class="ms-auto">
+                                <span class="text-muted" x-text="ram"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-baseline">
+                            <div class="h1 mb-0 me-2" x-text="memPercent.toFixed(1) + '%'"></div>
+                        </div>
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar bg-purple"
+                                 :style="`width: ${memPercent}%`"
+                                 role="progressbar"
+                                 :aria-valuenow="memPercent"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mt-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="subheader">CPU</div>
+                            <div class="ms-auto">
+                                <span class="text-muted" x-text="cpu.toFixed(1) + '%'"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-baseline">
+                            <div class="h1 mb-0 me-2" x-text="cpu.toFixed(1) + '%'"></div>
+                        </div>
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar bg-azure"
+                                 :style="`width: ${cpu}%`"
+                                 role="progressbar"
+                                 :aria-valuenow="cpu"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-12">
-            <pre x-html="colorizedLogs"
-                 x-ref="logBox"
-                 style="width:100%; height:750px !important; overflow:auto; background:#000; color: white; padding:10px;"></pre>
+        <div class="col-md-10">
+            <pre x-html="colorizedLogs" x-ref="logBox" style="width:100%; height:600px !important; overflow:auto; background:#000; color: white; padding:10px;"></pre>
         </div>
     </div>
 </div>
@@ -50,11 +104,18 @@
         return {
             unit: unit,
             logs: '',
+            cpu: 0,
+            memPercent: 0,
+            ram: '0 B',
             interval: null,
+            statsInterval: null,
 
             init() {
                 this.fetchLogs();
+                this.fetchStats();
+
                 this.interval = setInterval(() => this.fetchLogs(), 2000);
+                this.statsInterval = setInterval(() => this.fetchStats(), 5000);
             },
 
             async fetchLogs() {
@@ -63,7 +124,6 @@
                     const text = await response.text();
                     this.logs = text;
 
-                    // Auto-scroll
                     this.$nextTick(() => {
                         if (this.$refs.logBox) {
                             this.$refs.logBox.scrollTop = this.$refs.logBox.scrollHeight;
@@ -74,14 +134,28 @@
                 }
             },
 
+            async fetchStats() {
+                try {
+                    const response = await fetch(`/api/systemd/${this.unit}/stats`);
+                    const data = await response.json();
+                    this.cpu = data.cpu;
+                    this.memPercent = data.mem;
+                    this.ram = data.ram;
+                } catch (error) {
+                    console.error('Error fetching stats:', error);
+                }
+            },
+
             async startService() {
                 await fetch(`/api/systemd/${this.unit}/start`, { method: 'POST' });
                 this.fetchLogs();
+                setTimeout(() => this.fetchStats(), 1000);
             },
 
             async stopService() {
                 await fetch(`/api/systemd/${this.unit}/stop`, { method: 'POST' });
                 this.fetchLogs();
+                setTimeout(() => this.fetchStats(), 1000);
             },
 
             async restartService() {
@@ -95,70 +169,41 @@
                 return lines.map(line => {
                     let result = line;
 
-                    // Dates
                     result = result.replace(/^(\[?[A-Z][a-z]{2}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}\]?)/g, '<span style="color:#00d4ff">$1</span>');
                     result = result.replace(/^(\[?\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}(?:\.\d+)?\]?)/g, '<span style="color:#00d4ff">$1</span>');
                     result = result.replace(/(\d{2}:\d{2}:\d{2}(?:\.\d+)?)/g, '<span style="color:#00d4ff">$1</span>');
-
-                    // Niveaux de log
                     result = result.replace(/\b(TRACE|DEBUG)\b/gi, '<span style="color:#808080">$1</span>');
                     result = result.replace(/\b(INFO|INFORMATION)\b/gi, '<span style="color:#03a9f4"><strong>$1</strong></span>');
                     result = result.replace(/\b(WARN|WARNING)\b/gi, '<span style="color:#ff9800"><strong>$1</strong></span>');
                     result = result.replace(/\b(ERROR|FATAL|CRITICAL)\b/gi, '<span style="color:#ff0000"><strong>$1</strong></span>');
                     result = result.replace(/\b(SUCCESS|OK|DONE)\b/gi, '<span style="color:#4caf50"><strong>$1</strong></span>');
-
-                    // Actions système
                     result = result.replace(/\b(Starting|Started|Startup)\b/gi, '<span style="color:#2ecc71"><strong>$1</strong></span>');
                     result = result.replace(/\b(Stopping|Stopped|Shutdown|Shutting down)\b/gi, '<span style="color:#e74c3c"><strong>$1</strong></span>');
                     result = result.replace(/\b(Restarting|Restarted|Reloading|Reloaded)\b/gi, '<span style="color:#f39c12"><strong>$1</strong></span>');
                     result = result.replace(/\b(Failed|Failure|Crash|Crashed)\b/gi, '<span style="color:#ff0000"><strong>$1</strong></span>');
-
-                    // Status
                     result = result.replace(/\b(active|running|enabled|online|connected|up)\b/gi, '<span style="color:#4caf50">$1</span>');
                     result = result.replace(/\b(inactive|dead|disabled|offline|disconnected|down)\b/gi, '<span style="color:#f44336">$1</span>');
-
-                    // Process[PID]
                     result = result.replace(/\b(systemd)\[(\d+)\]/g, '<span style="color:#e91e63">$1</span>[<span style="color:#e67e22">$2</span>]');
                     result = result.replace(/\b([a-zA-Z][\w\-\.]+)\[(\d+)\]/g, '<span style="color:#f39c12">$1</span>[<span style="color:#e67e22">$2</span>]');
-
-                    // Hostnames et IPs
                     result = result.replace(/\b([a-z][\w\-]*-[a-f0-9]{8})\b/gi, '<span style="color:#9b59b6">$1</span>');
                     result = result.replace(/\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}(?::\d+)?)\b/g, '<span style="color:#9b59b6">$1</span>');
-
-                    // URLs
                     result = result.replace(/\b(https?:\/\/[^\s<>"]+)/gi, '<span style="color:#00bcd4"><u>$1</u></span>');
                     result = result.replace(/\b(www\.[^\s<>"]+)/gi, '<span style="color:#00bcd4"><u>$1</u></span>');
-
-                    // Chemins
                     result = result.replace(/\b(\/[\w\/\-\.]+\.[\w]+)\b/g, '<span style="color:#8bc34a">$1</span>');
                     result = result.replace(/\b([A-Z]:\\[\w\\:\-\.]+)\b/g, '<span style="color:#8bc34a">$1</span>');
-
-                    // Packages
                     result = result.replace(/\b([a-z]+\.[a-z]+[\w\.]+[A-Z][\w]*)/g, '<span style="color:#ba68c8">$1</span>');
-
-                    // Threads
                     result = result.replace(/\b(thread|Thread)[\s\-:]+([\w\-]+)/gi, 'thread: <span style="color:#ffeb3b">$2</span>');
                     result = result.replace(/\b(qtp[\d\-]+|pool-\d+-thread-\d+|main|worker-\d+)\b/g, '<span style="color:#ffeb3b">$1</span>');
-
-                    // Versions et ports
                     result = result.replace(/\bport[\s:]+(\d+)/gi, 'port <span style="color:#ffeb3b">$1</span>');
                     result = result.replace(/\bversion[\s:]+(\d+\.[\d\.]+)/gi, 'version <span style="color:#ffeb3b">$1</span>');
                     result = result.replace(/\b(v?\d+\.\d+\.\d+)\b/g, '<span style="color:#ffeb3b">$1</span>');
-
-                    // SQL
                     result = result.replace(/\b(SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|CREATE|DROP|ALTER|TABLE)\b/gi, '<span style="color:#ba68c8"><strong>$1</strong></span>');
                     result = result.replace(/\b(SQLite|MySQL|PostgreSQL|MongoDB|Redis|Database|Connection)\b/gi, '<span style="color:#ba68c8">$1</span>');
-
-                    // HTTP
                     result = result.replace(/\b(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)\b/g, '<span style="color:#26c6da"><strong>$1</strong></span>');
                     result = result.replace(/\b(200|201|204)\b/g, '<span style="color:#4caf50">$1</span>');
                     result = result.replace(/\b(400|401|403|404|422)\b/g, '<span style="color:#ff9800">$1</span>');
                     result = result.replace(/\b(500|502|503|504)\b/g, '<span style="color:#ff0000">$1</span>');
-
-                    // Exceptions
                     result = result.replace(/\b(Exception|Error|Throwable|at\s+[\w\.]+\([\w\.]+:\d+\))/g, '<span style="color:#ff5252">$1</span>');
-
-                    // Loading
                     result = result.replace(/\b(Loading|Loaded|Chargement|Initializing|Initialized)\b/gi, '<span style="color:#26c6da">$1</span>');
 
                     return result;

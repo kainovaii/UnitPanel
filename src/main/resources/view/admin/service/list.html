@@ -88,10 +88,7 @@
             interval: null,
 
             init() {
-                // Charger le statut immédiatement
                 this.updateStatus();
-
-                // Mettre à jour toutes les 5 secondes
                 this.interval = setInterval(() => {
                     this.updateStatus();
                 }, 5000);

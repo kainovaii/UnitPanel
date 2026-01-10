@@ -104,4 +104,61 @@ public class SystemdService
             throw new RuntimeException(e);
         }
     }
+
+    public static ServiceStats getStats(String unit)
+    {
+        try {
+            // Récupérer le PID principal du service
+            String pid = exec("sudo", "systemctl", "show", unit, "--property=MainPID").trim();
+            pid = pid.replace("MainPID=", "");
+
+            if (pid.equals("0") || pid.isEmpty()) {
+                return new ServiceStats(0.0, 0.0, "0 B");
+            }
+
+            // Récupérer CPU et RAM via ps
+            String stats = exec("sudo", "ps", "-p", pid, "-o", "%cpu,%mem,rss", "--no-headers").trim();
+
+            if (stats.isEmpty()) {
+                return new ServiceStats(0.0, 0.0, "0 B");
+            }
+
+            String[] parts = stats.trim().split("\\s+");
+            double cpu = Double.parseDouble(parts[0]);
+            double mem = Double.parseDouble(parts[1]);
+            long rssKb = Long.parseLong(parts[2]); // RSS en KB
+
+            String ramFormatted = formatBytes(rssKb * 1024); // Convertir en bytes puis formater
+
+            return new ServiceStats(cpu, mem, ramFormatted);
+        } catch (Exception e) {
+            System.err.println("Error getting stats for " + unit + ": " + e.getMessage());
+            return new ServiceStats(0.0, 0.0, "0 B");
+        }
+    }
+
+    private static String formatBytes(long bytes)
+    {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return String.format("%.2f KB", bytes / 1024.0);
+        if (bytes < 1024 * 1024 * 1024) return String.format("%.2f MB", bytes / (1024.0 * 1024.0));
+        return String.format("%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0));
+    }
+
+    public static class ServiceStats
+    {
+        public final double cpu;
+        public final double memPercent;
+        public final String ram;
+
+        public ServiceStats(double cpu, double memPercent, String ram)
+        {
+            this.cpu = cpu;
+            this.memPercent = memPercent;
+            this.ram = ram;
+        }
+
+        public String toJson() { return String.format("{\"cpu\":%.2f,\"mem\":%.2f,\"ram\":\"%s\"}", cpu, memPercent, ram); }
+    }
 }
+
