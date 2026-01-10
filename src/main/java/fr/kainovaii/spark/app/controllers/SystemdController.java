@@ -19,6 +19,7 @@ public class SystemdController extends BaseController
         post("/api/systemd/:unit/start", this::start);
         post("/api/systemd/:unit/stop", this::stop);
         get("/api/systemd/:unit/logs", this::logs);
+        get("/api/systemd/:unit/status", this::status);
     }
 
     private Object start(Request req, Response res)
@@ -46,5 +47,15 @@ public class SystemdController extends BaseController
 
         res.type("text/plain");
         return SystemdService.logs(unit);
+    }
+
+    private Object status(Request req, Response res)
+    {
+        String unit = req.params("unit");
+        if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
+
+        String status = SystemdService.getStatus(unit);
+        res.type("application/json");
+        return "{\"status\":\"" + status + "\"}";
     }
 }

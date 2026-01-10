@@ -82,6 +82,12 @@ public class SystemdService
         exec("sudo", "systemctl", "daemon-reload");
     }
 
+    public static String getStatus(String unit)
+    {
+        String status = exec("sudo", "systemctl", "is-active", unit).trim();
+        return status; // "active", "inactive", "failed", etc.
+    }
+
     private static String exec(String... cmd)
     {
         try {

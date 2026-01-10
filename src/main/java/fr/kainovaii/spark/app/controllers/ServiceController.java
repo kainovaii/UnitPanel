@@ -38,7 +38,6 @@ public class ServiceController extends BaseController
     {
         requireLogin(req, res);
         List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
-
         return render("admin/service/list.html", Map.of("services", services));
     }
 
@@ -47,9 +46,6 @@ public class ServiceController extends BaseController
         requireLogin(req, res);
         int id = Integer.parseInt(req.params("id"));
         Service service = DB.withConnection(() -> serviceRepository.findById(id));
-
-        System.out.println(service);
-
         return render("admin/service/console.html", Map.of("service", service));
     }
 
@@ -63,9 +59,7 @@ public class ServiceController extends BaseController
         String workingDirectory = req.queryParams("workingDirectory");
 
         String unit = null;
-        if (!name.endsWith(".service")) {
-            unit = name + ".service";
-        }
+        if (!name.endsWith(".service")) { unit = name + ".service"; }
 
         SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
         boolean query = serviceRepository.create(name, description, execStart, workingDirectory, unit, true);

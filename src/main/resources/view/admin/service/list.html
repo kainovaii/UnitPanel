@@ -1,210 +1,269 @@
 {% extends "layout/admin.html" %}
 {% block content %}
 <div class="container">
-    <div class="col-12">
-        <div class="card mt-4">
-            <div class="card-table">
-                <div class="card-header">
-                    <div class="row w-full">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header d-print-none p-0 mb-3" aria-label="Page header">
+                <div>
+                    <div class="row g-2 align-items-center">
                         <div class="col">
-                            <h3 class="card-title mb-0">Services</h3>
+                            <div class="page-pretitle">Dashboard</div>
+                            <h2 class="page-title text-capitalize">Services</h2>
                         </div>
-                        <div class="col-md-auto col-sm-12">
-                            <div class="ms-auto d-flex flex-wrap btn-list">
-                                <div class="input-group input-group-flat w-auto">
-                                <span class="input-group-text">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
-                                </span>
-                                    <input id="advanced-table-search" type="text" class="form-control" autocomplete="off" />
-                                </div>
-                                <a  data-bs-toggle="modal" data-bs-target="#createServiceModal" href="#" class="btn btn-0">New service</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="advanced-table">
-                    <div class="table-responsive">
-                        <table class="table table-vcenter table-selectable">
-                            <thead>
-                            <tr>
-                                <th>
-                                    <button class="table-sort d-flex justify-content-between" data-sort="sort-city">Name</button>
-                                </th>
-                                <th>
-                                    <button class="table-sort d-flex justify-content-between" data-sort="sort-status">Unit</button>
-                                </th>
-                                <th>
-                                    <button class="table-sort d-flex justify-content-between" data-sort="sort-date">Description</button>
-                                </th>
-                                <th>
-                                    <button class="table-sort d-flex justify-content-between" data-sort="sort-date">Autostart</button>
-                                </th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-tbody">
-                            {% for service in services %}
-                            <tr>
-                                <td class="sort-name">
-                                    <span>{{ service.name }}</span>
-                                </td>
-                                <td class="sort-unit">
-                                    <span>{{ service.unit }}</span>
-                                </td>
-                                <td class="sort-description">
-                                    <span>{{ service.description }}</span>
-                                </td>
-                                <td class="sort-autostart">
-                                    <span class="badge">NaN</span>
-                                </td>
-                                <td class="text-end">
-                                    <a href="/admin/services/{{ service.id }}/console" class="btn align-text-top">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-terminal"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5l-5 5" /><path d="M12 19l7 0" /></svg>
-                                        Console
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <span class="d-none d-sm-inline">
+                                    <a class="btn btn-md" data-bs-toggle="modal" data-bs-target="#createServiceModal" href="#">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                                        New service
                                     </a>
-                                    <!--
-                                    <div class="dropdown">
-                                        <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">Actions</button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="/admin/services/{{ service.id }}/console" class="dropdown-item" >Console</a>
-                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="">Edit</a>
-                                            <a  class="dropdown-item" data-bs-toggle="modal" data-bs-target="">Delete</a>
-                                        </div>
-                                    </div>
-                                    -->
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer d-flex align-items-center">
-                        <div class="dropdown">
-                            <a class="btn dropdown-toggle" data-bs-toggle="dropdown">
-                                <span id="page-count" class="me-1">20</span>
-                                <span>records</span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" onclick="setPageListItems(event)" data-value="10">10 records</a>
-                                <a class="dropdown-item" onclick="setPageListItems(event)" data-value="20">20 records</a>
-                                <a class="dropdown-item" onclick="setPageListItems(event)" data-value="50">50 records</a>
-                                <a class="dropdown-item" onclick="setPageListItems(event)" data-value="100">100 records</a>
+                                </span>
                             </div>
                         </div>
-                        <ul class="pagination m-0 ms-auto">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                    <!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
-                                    <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="icon icon-1"
-                                    >
-                                        <path d="M15 6l-6 6l6 6" />
-                                    </svg>
-                                </a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">6</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">7</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">8</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">9</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">10</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">
-                                    <!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
-                                    <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="icon icon-1"
-                                    >
-                                        <path d="M9 6l6 6l-6 6" />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <script>
-            const advancedTable = {
-                headers: [
-                    { "data-sort": "sort-icon", name: "Icon" },
-                    { "data-sort": "sort-title", name: "Title" },
-                    { "data-sort": "sort-tools", name: "Tools" },
-                ],
-            };
-            const setPageListItems = (e) => {
-                window.tabler_list["advanced-table"].page = parseInt(e.target.dataset.value);
-                window.tabler_list["advanced-table"].update();
-                document.querySelector("#page-count").innerHTML = e.target.dataset.value;
-            };
-            window.tabler_list = window.tabler_list || {};
-            document.addEventListener("DOMContentLoaded", function () {
-                const list = (window.tabler_list["advanced-table"] = new List("advanced-table", {
-                    sortClass: "table-sort",
-                    listClass: "table-tbody",
-                    page: parseInt("20"),
-                    pagination: {
-                        item: (value) => {
-                            return `<li class="page-item"><a class="page-link cursor-pointer">${value.page}</a></li>`;
-                        },
-                        innerWindow: 1,
-                        outerWindow: 1,
-                        left: 0,
-                        right: 0,
-                    },
-                    valueNames: advancedTable.headers.map((header) => header["data-sort"]),
-                }));
-                const searchInput = document.querySelector("#advanced-table-search");
-                if (searchInput) {
-                    searchInput.addEventListener("input", () => {
-                        list.search(searchInput.value);
-                    });
-                }
-            });
-        </script>
+        <div class="col-md-12">
+            <div class="row" id="services-container">
+                {% for service in services %}
+                <div class="col-md-4 mb-3">
+                    <div class="card card-sm card-link card-link-pop" data-service-unit="{{ service.unit }}">
+                        <div class="card-status-top service-status-indicator bg-secondary" data-status="loading"></div>
+                        <div class="card-body">
+                            <h3 class="card-title text-capitalize">{{ service.name }}</h3>
+                            <ul class="list-unstyled space-y-1">
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-folder"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+                                    <span class="badge">{{ service.workingDirectory }}</span>
+                                </li>
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" /></svg>
+                                    <span class="badge">{{ service.unit }}</span>
+                                </li>
+                            </ul>
+                            <div class="mt-4">
+                                <div class="row align-items-center">
+                                    <div class="col service-status-text text-secondary">
+                                        <span class="service-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /></svg>
+                                        </span>
+                                        <span class="service-status-label">Loading...</span>
+                                    </div>
+                                    <div class="col-auto text-secondary">
+                                        <a class="link-secondary" href="/admin/services/{{ service.id }}/console">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-terminal"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5l-5 5" /><path d="M12 19l7 0" /></svg>
+                                        </a>
+                                    </div>
+                                    <div class="col-auto text-secondary">
+                                        <a class="link-secondary" href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
     {% include "./partials/create-modal.html" %}
 </div>
+<style>
+    .service-status-indicator {
+        height: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .service-icon {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 0.5rem;
+    }
+
+    .service-status-text {
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+    }
+
+    .card-link-pop {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .card-link-pop:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        border-color: rgba(0,0,0,0.1);
+    }
+
+    .service-status-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .btn-list {
+        gap: 0.25rem;
+    }
+
+    .service-status-indicator[data-status="loading"] {
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .text-success-custom {
+        color: #2ecc71 !important;
+    }
+
+    .text-danger-custom {
+        color: #e74c3c !important;
+    }
+
+    .text-warning-custom {
+        color: #f39c12 !important;
+    }
+</style>
+<script>
+    const icons = {
+        active: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-success">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M9 12l2 2l4 -4" />
+        </svg>`,
+
+        inactive: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-danger">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M9 9l6 6" />
+            <path d="M15 9l-6 6" />
+        </svg>`,
+
+        failed: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-danger">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M12 8l0 4" />
+            <path d="M12 16l.01 0" />
+        </svg>`,
+
+        activating: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-warning">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 3a9 9 0 1 0 9 9" />
+        </svg>`,
+
+        loading: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+        </svg>`
+    };
+
+    const labels = {
+        active: 'Running',
+        inactive: 'Stopped',
+        failed: 'Failed',
+        activating: 'Starting...',
+        deactivating: 'Stopping...',
+        reloading: 'Reloading...',
+        dead: 'Dead',
+        unknown: 'Unknown'
+    };
+
+    async function updateServiceStatus(card) {
+        const unit = card.dataset.serviceUnit;
+
+        try {
+            const response = await fetch(`/api/systemd/${unit}/status`);
+            const data = await response.json();
+            const status = data.status.trim();
+
+            const indicator = card.querySelector('.service-status-indicator');
+            const statusText = card.querySelector('.service-status-text');
+            const iconSpan = card.querySelector('.service-icon');
+            const labelSpan = card.querySelector('.service-status-label');
+
+            indicator.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-secondary', 'bg-info');
+            statusText.classList.remove('text-success', 'text-danger', 'text-warning', 'text-secondary', 'text-info');
+
+            let icon = icons.loading;
+            let label = labels.unknown;
+            let colorClass = 'secondary';
+
+            switch(status) {
+                case 'active':
+                    icon = icons.active;
+                    label = labels.active;
+                    colorClass = 'success';
+                    break;
+
+                case 'inactive':
+                case 'dead':
+                    icon = icons.inactive;
+                    label = status === 'dead' ? labels.dead : labels.inactive;
+                    colorClass = 'danger';
+                    break;
+
+                case 'failed':
+                    icon = icons.failed;
+                    label = labels.failed;
+                    colorClass = 'danger';
+                    break;
+
+                case 'activating':
+                case 'reloading':
+                    icon = icons.activating;
+                    label = labels[status];
+                    colorClass = 'warning';
+                    break;
+
+                case 'deactivating':
+                    icon = icons.activating;
+                    label = labels.deactivating;
+                    colorClass = 'warning';
+                    break;
+
+                default:
+                    icon = icons.loading;
+                    label = status.charAt(0).toUpperCase() + status.slice(1);
+                    colorClass = 'info';
+            }
+
+            indicator.classList.add(`bg-${colorClass}`);
+            statusText.classList.add(`text-${colorClass}`);
+            iconSpan.innerHTML = icon;
+            labelSpan.textContent = label;
+            indicator.dataset.status = status;
+
+        } catch (error) {
+            console.error('Error fetching status for', unit, ':', error);
+
+            const indicator = card.querySelector('.service-status-indicator');
+            const statusText = card.querySelector('.service-status-text');
+            const iconSpan = card.querySelector('.service-icon');
+            const labelSpan = card.querySelector('.service-status-label');
+
+            indicator.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info');
+            indicator.classList.add('bg-secondary');
+            statusText.classList.add('text-secondary');
+            iconSpan.innerHTML = icons.loading;
+            labelSpan.textContent = 'Error';
+        }
+    }
+
+    function updateAllStatuses() {
+        const cards = document.querySelectorAll('[data-service-unit]');
+        cards.forEach(card => updateServiceStatus(card));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateAllStatuses();
+    });
+
+    setInterval(updateAllStatuses, 5000);
+</script>
 {% endblock %}
