@@ -2,6 +2,7 @@ package fr.kainovaii.spark.app.controllers;
 
 import fr.kainovaii.spark.app.models.Service;
 import fr.kainovaii.spark.app.repository.ServiceRepository;
+import fr.kainovaii.spark.app.services.SystemdService;
 import fr.kainovaii.spark.core.database.DB;
 import fr.kainovaii.spark.core.web.controller.BaseController;
 import fr.kainovaii.spark.core.web.controller.Controller;
@@ -52,15 +53,22 @@ public class ServiceController extends BaseController
         return render("admin/service/console.html", Map.of("service", service));
     }
 
-    private Object create(Request req, Response res)
+    private Object create(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
 
         String name = req.queryParams("name");
-        String unit = req.queryParams("unit");
         String description = req.queryParams("description");
+        String execStart = req.queryParams("execStart");
+        String workingDirectory = req.queryParams("workingDirectory");
 
-        boolean query = serviceRepository.create(name, unit, description, true);
+        String unit = null;
+        if (!name.endsWith(".service")) {
+            unit = name + ".service";
+        }
+
+        SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
+        boolean query = serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
         if (!query) redirectWithFlash(req, res, "error", "Creating error", "/admin/services");
 
         redirectWithFlash(req, res, "success", "Creating success", "/admin/services");

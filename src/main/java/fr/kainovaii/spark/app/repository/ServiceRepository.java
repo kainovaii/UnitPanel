@@ -6,13 +6,16 @@ import org.javalite.activejdbc.LazyList;
 
 public class ServiceRepository
 {
-    public boolean create(String name, String unit, String description, boolean autostart)
+    public boolean create(String name, String description, String execStart, String workingDirectory, String unit, boolean autostart)
     {
-        return DB.withConnection(() -> {
+        return DB.withConnection(() ->
+        {
             Service service = new Service();
             service.setName(name);
-            service.setUnit(unit);
             service.setDescription(description);
+            service.setExecStart(execStart);
+            service.setWorkingDirectory(workingDirectory);
+            service.setUnit(unit);
             service.setAutostart(autostart);
             return service.saveIt();
         });

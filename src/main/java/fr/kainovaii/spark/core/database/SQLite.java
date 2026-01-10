@@ -58,6 +58,8 @@ public class SQLite
         CREATE TABLE IF NOT EXISTS services (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE,
+            execStart TEXT NOT NULL UNIQUE,
+            workingDirectory TEXT NOT NULL UNIQUE,
             unit TEXT NOT NULL UNIQUE,
             description TEXT,
             autostart BOOLEAN DEFAULT 0
