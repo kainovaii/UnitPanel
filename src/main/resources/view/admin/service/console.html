@@ -67,14 +67,102 @@
     function liveLogs(unit) {
         if(logInterval) clearInterval(logInterval);
         const logBox = document.getElementById('logBox');
+
         logInterval = setInterval(() => {
             fetch(`/api/systemd/${unit}/logs`)
                 .then(r => r.text())
                 .then(text => {
-                    logBox.textContent = text;
+                    logBox.innerHTML = colorizeLog(text);
                     logBox.scrollTop = logBox.scrollHeight;
                 });
         }, 2000);
+    }
+
+    function colorizeLog(text) {
+        // Retirer la ligne "Status:"
+        const lines = text.split('\n').filter(line => !line.startsWith('Status:'));
+
+        return lines.map(line => {
+            // Échapper les caractères HTML pour éviter les problèmes
+            let parts = [];
+
+            // Parser la ligne en parties distinctes
+            // Format: "Jan 10 08:53:36 vps-492e9cd2 java[24658]: message"
+            const dateMatch = line.match(/^([A-Z][a-z]{2}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})\s+/);
+
+            if (dateMatch) {
+                const date = dateMatch[1];
+                const rest = line.substring(dateMatch[0].length);
+
+                // Coloriser la date
+                parts.push(`<span style="color:#00d4ff">${date}</span>`);
+
+                // Parser le reste: hostname processname[pid]: message
+                const hostMatch = rest.match(/^(\S+)\s+/);
+                if (hostMatch) {
+                    const hostname = hostMatch[1];
+                    const afterHost = rest.substring(hostMatch[0].length);
+
+                    // Coloriser hostname
+                    parts.push(` <span style="color:#9b59b6">${hostname}</span>`);
+
+                    // Parser process[pid]:
+                    const procMatch = afterHost.match(/^(\w+)\[(\d+)\]:\s*/);
+                    if (procMatch) {
+                        const procName = procMatch[1];
+                        const pid = procMatch[2];
+                        const message = afterHost.substring(procMatch[0].length);
+
+                        // Coloriser process et PID
+                        if (procName === 'systemd') {
+                            parts.push(` <span style="color:#e91e63">${procName}</span>[<span style="color:#e67e22">${pid}</span>]: `);
+                        } else {
+                            parts.push(` <span style="color:#f39c12">${procName}</span>[<span style="color:#e67e22">${pid}</span>]: `);
+                        }
+
+                        // Coloriser le message
+                        parts.push(colorizeMessage(message));
+                    } else {
+                        parts.push(` ${afterHost}`);
+                    }
+                } else {
+                    parts.push(` ${rest}`);
+                }
+
+                return parts.join('');
+            } else {
+                // Ligne sans date (continuation)
+                return colorizeMessage(line);
+            }
+        }).join('\n');
+    }
+
+    function colorizeMessage(msg) {
+        let result = msg;
+
+        // Mots-clés importants
+        result = result.replace(/\b(Starting|Started)\b/g, '<span style="color:#2ecc71"><strong>$1</strong></span>');
+        result = result.replace(/\b(Stopping|Stopped)\b/g, '<span style="color:#e74c3c"><strong>$1</strong></span>');
+        result = result.replace(/\b(Failed|ERROR|Error)\b/gi, '<span style="color:#ff0000"><strong>$1</strong></span>');
+        result = result.replace(/\b(WARNING|WARN)\b/gi, '<span style="color:#ff9800"><strong>$1</strong></span>');
+
+        // INFO
+        result = result.replace(/\bINFO\b/g, '<span style="color:#03a9f4">INFO</span>');
+
+        // SQLite, Database, Loading, Chargement
+        result = result.replace(/\b(SQLite|Database|Loading|Chargement)\b/g, '<span style="color:#ba68c8">$1</span>');
+
+        // URLs
+        result = result.replace(/(https?:\/\/[^\s]+)/g, '<span style="color:#00bcd4"><u>$1</u></span>');
+
+        // Thread names (qtp..., main)
+        result = result.replace(/\b(qtp[\d\-]+|main)\b/g, '<span style="color:#ffeb3b">$1</span>');
+
+        // Status
+        result = result.replace(/\b(active|running|enabled)\b/gi, '<span style="color:#4caf50">$1</span>');
+        result = result.replace(/\b(inactive|dead|disabled)\b/gi, '<span style="color:#f44336">$1</span>');
+
+        return result;
     }
 
     document.addEventListener("DOMContentLoaded", () => liveLogs('{{ service.unit }}'));
