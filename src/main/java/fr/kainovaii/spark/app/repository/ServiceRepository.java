@@ -26,4 +26,12 @@ public class ServiceRepository
     public Service findById(int id) { return Service.findById(id); }
 
     public Service findByUnit(String unit) { return Service.findFirst("unit = ?", unit); }
+
+    public boolean deleteById(int id)
+    {
+        Service service = this.findById(id);
+        if (service == null) return false;
+        return service.delete();
+    }
+
 }

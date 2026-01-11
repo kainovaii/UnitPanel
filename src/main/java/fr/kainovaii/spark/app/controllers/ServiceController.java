@@ -33,8 +33,9 @@ public class ServiceController extends BaseController
     {
         get("/admin/services", this::list);
         get("/admin/services/:id/console", this::console);
-        post("/admin/services/create", this::create);
         get("/admin/services/:id/editor", this::editor);
+        post("/admin/services/create", this::create);
+        post("/admin/services/delete", this::delete);
     }
 
     private Object list(Request req, Response res)
@@ -61,15 +62,36 @@ public class ServiceController extends BaseController
         String execStart = req.queryParams("execStart");
         String workingDirectory = req.queryParams("workingDirectory");
 
-        String unit = null;
-        if (!name.endsWith(".service")) { unit = name + ".service"; }
+        String unit = name;
+        if (!name.endsWith(".service")) {
+            unit = name + ".service";
+        }
 
         SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
         boolean query = serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
-        if (!query) redirectWithFlash(req, res, "error", "Creating error", "/admin/services");
 
-        redirectWithFlash(req, res, "success", "Creating success", "/admin/services");
-        return true;
+        if (!query) {
+            return redirectWithFlash(req, res, "error", "Creating error", "/admin/services");
+        }
+
+        return redirectWithFlash(req, res, "success", "Service created successfully", "/admin/services");
+    }
+
+    private Object delete(Request req, Response res) throws Exception
+    {
+        requireLogin(req, res);
+
+        int id = Integer.parseInt(req.queryParams("id"));
+        String name = req.queryParams("name");
+
+        SystemdService.deleteService(name);
+        boolean query = DB.withConnection(() -> serviceRepository.deleteById(id));
+
+        if (!query) {
+            return redirectWithFlash(req, res, "error", "Deleting error", "/admin/services");
+        }
+
+        return redirectWithFlash(req, res, "success", "Service deleted successfully", "/admin/services");
     }
     
     private Object editor(Request req, Response res)
