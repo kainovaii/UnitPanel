@@ -114,7 +114,6 @@ public class SystemdService
         }
     }
 
-    // ← NOUVELLE MÉTHODE
     public static ServiceStats getTotalStats(List<String> units)
     {
         double totalCpu = 0.0;

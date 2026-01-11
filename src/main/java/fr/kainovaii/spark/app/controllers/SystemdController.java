@@ -132,7 +132,6 @@ public class SystemdController extends BaseController
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
         try {
-            // Récupérer le service pour avoir le workingDirectory
             List<Service> services = DB.withConnection(() ->
                     serviceRepository.getAll().stream()
                             .filter(s -> s.getUnit().equals(unit))
