@@ -16,6 +16,9 @@ UnitPanel is a web-based control panel for managing systemd services, with real-
 
 ---
 
+## TODO
+- Add delete service
+
 ## 💻 Technologies utilisées
 
 - **[Spark Java](https://sparkjava.com/)** : framework web léger pour créer des routes et gérer les requêtes HTTP.
