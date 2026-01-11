@@ -23,6 +23,73 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" x-data="systemdDashboard()" x-init="init()">
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="subheader">Services</div>
+                        <div class="ms-auto">
+                            <span class="text-muted" x-text="services"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-baseline mt-2">
+                        <div class="h1 mb-0 me-2" x-text="services"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="subheader">CPU</div>
+                        <div class="ms-auto">
+                            <span class="text-muted" x-text="cpu.toFixed(1) + '%'"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                        <div class="h1 mb-0 me-2" x-text="cpu.toFixed(1) + '%'"></div>
+                    </div>
+                    <div class="progress progress-sm mt-2">
+                        <div class="progress-bar bg-azure"
+                             :style="`width: ${Math.min(cpu, 100)}%`"
+                             role="progressbar"
+                             :aria-valuenow="cpu"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="subheader">RAM</div>
+                        <div class="ms-auto">
+                            <span class="text-muted" x-text="ram"></span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-baseline">
+                        <div class="h1 mb-0 me-2" x-text="ramPercent.toFixed(1) + '%'"></div>
+                    </div>
+                    <div class="progress progress-sm mt-2">
+                        <div class="progress-bar bg-purple"
+                             :style="`width: ${ramPercent}%`"
+                             role="progressbar"
+                             :aria-valuenow="ramPercent"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="row">
                 {% for service in services %}
@@ -81,6 +148,40 @@
     }
 </style>
 <script>
+    function systemdDashboard() {
+        return {
+            services: 0,
+            cpu: 0,
+            ram: '0 B',
+            ramPercent: 0,
+            interval: null,
+
+            init() {
+                this.fetchTotalStats();
+                this.interval = setInterval(() => this.fetchTotalStats(), 5000);
+            },
+
+            async fetchTotalStats() {
+                try {
+                    const response = await fetch('/api/systemd/stats/total');
+                    const data = await response.json();
+
+                    if (data.error) {
+                        console.error('API Error:', data.error);
+                        return;
+                    }
+
+                    this.cpu = data.cpu;
+                    this.ram = data.ram;
+                    this.ramPercent = Math.min(data.mem, 100);
+                    this.services = data.count;
+
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+            }
+        }
+    }
     function serviceCard(unit) {
         return {
             unit: unit,

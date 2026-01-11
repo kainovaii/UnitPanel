@@ -22,6 +22,7 @@ public class AdminController extends BaseController
     private Object list(Request req, Response res)
     {
         requireLogin(req, res);
-        return render("admin/dashboard.html", Map.of());
+        res.redirect("/admin/services");
+        return true;  // render("admin/dashboard.html", Map.of());
     }
 }

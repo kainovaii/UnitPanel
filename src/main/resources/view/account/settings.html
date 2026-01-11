@@ -9,18 +9,19 @@
             <div class="col-md-12">
                 <div class="card card-bordered">
                     <div class="card-body">
+                        {% for user in loggedUser %}
                         <form action="/account" method="POST">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div>
                                         <label for="username" class="form-label">Username:</label>
-                                        <input class="form-control" type="text" id="username" name="username" value="" placeholder="Enter username....">
+                                        <input class="form-control" type="text" id="username" name="username" value="{{ user.username }}" placeholder="Enter new username">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
                                         <label for="password" class="form-label">New password:</label>
-                                        <input class="form-control" type="text" id="password" name="password" value="" placeholder="Enter new password....">
+                                        <input class="form-control" type="text" id="password" name="password" value="" placeholder="Enter new password">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -30,6 +31,7 @@
                                 </div>
                             </div>
                         </form>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
