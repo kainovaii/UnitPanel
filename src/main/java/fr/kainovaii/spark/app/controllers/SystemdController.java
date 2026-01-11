@@ -42,6 +42,7 @@ public class SystemdController extends BaseController
 
     private Object start(Request req, Response res)
     {
+        requireLogin(req, res);
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -51,6 +52,7 @@ public class SystemdController extends BaseController
 
     private Object stop(Request req, Response res)
     {
+        requireLogin(req, res);
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -60,6 +62,7 @@ public class SystemdController extends BaseController
 
     private Object logs(Request req, Response res)
     {
+        requireLogin(req, res);
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -69,6 +72,7 @@ public class SystemdController extends BaseController
 
     private Object status(Request req, Response res)
     {
+        requireLogin(req, res);
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -79,6 +83,7 @@ public class SystemdController extends BaseController
 
     private Object stats(Request req, Response res)
     {
+        requireLogin(req, res);
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -95,6 +100,7 @@ public class SystemdController extends BaseController
 
     private Object totalStats(Request req, Response res)
     {
+        requireLogin(req, res);
         try {
             String unitsParam = req.queryParams("units");
             List<String> units;
@@ -114,7 +120,6 @@ public class SystemdController extends BaseController
             SystemdService.ServiceStats stats = SystemdService.getTotalStats(units);
 
             res.type("application/json");
-            // ← AJOUTE LE COUNT ICI
             return String.format("{\"cpu\":%.2f,\"mem\":%.2f,\"ram\":\"%s\",\"count\":%d}",
                     stats.cpu, stats.memPercent, stats.ram, units.size());
 
@@ -128,6 +133,7 @@ public class SystemdController extends BaseController
 
     private Object listFiles(Request req, Response res)
     {
+        requireLogin(req, res);
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -161,6 +167,7 @@ public class SystemdController extends BaseController
 
     private Object getFile(Request req, Response res)
     {
+        requireLogin(req, res);
         String filePath = req.queryParams("path");
         if (filePath == null || filePath.isEmpty()) return error(res, "Missing file path");
 
@@ -176,6 +183,7 @@ public class SystemdController extends BaseController
 
     private Object saveFile(Request req, Response res)
     {
+        requireLogin(req, res);
         String filePath = req.queryParams("path");
         if (filePath == null || filePath.isEmpty()) return error(res, "Missing file path");
 
