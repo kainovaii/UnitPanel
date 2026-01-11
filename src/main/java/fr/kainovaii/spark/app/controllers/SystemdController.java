@@ -105,14 +105,11 @@ public class SystemdController extends BaseController
             String unitsParam = req.queryParams("units");
             List<String> units;
 
-            if (unitsParam == null || unitsParam.isEmpty()) {
-                List<Service> services = DB.withConnection(() ->
-                        serviceRepository.getAll().stream().toList()
-                );
+            if (unitsParam == null || unitsParam.isEmpty())
+            {
+                List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
 
-                units = services.stream()
-                        .map(Service::getUnit)
-                        .toList();
+                units = services.stream().map(Service::getUnit).toList();
             } else {
                 units = Arrays.asList(unitsParam.split(","));
             }
@@ -120,10 +117,10 @@ public class SystemdController extends BaseController
             SystemdService.ServiceStats stats = SystemdService.getTotalStats(units);
 
             res.type("application/json");
-            return String.format("{\"cpu\":%.2f,\"mem\":%.2f,\"ram\":\"%s\",\"count\":%d}",
-                    stats.cpu, stats.memPercent, stats.ram, units.size());
+            return String.format("{\"cpu\":%.2f,\"mem\":%.2f,\"ram\":\"%s\",\"count\":%d}", stats.cpu, stats.memPercent, stats.ram, units.size());
 
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             res.type("application/json");
             res.status(500);
@@ -138,22 +135,14 @@ public class SystemdController extends BaseController
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
         try {
-            List<Service> services = DB.withConnection(() ->
-                    serviceRepository.getAll().stream()
-                            .filter(s -> s.getUnit().equals(unit))
-                            .toList()
-            );
+            List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream() .filter(s -> s.getUnit().equals(unit)) .toList() );
 
-            if (services.isEmpty()) {
-                return error(res, "Service not found");
-            }
+            if (services.isEmpty()) { return error(res, "Service not found"); }
 
             Service service = services.get(0);
             String workDir = service.getWorkingDirectory();
 
-            if (workDir == null || workDir.isEmpty()) {
-                return error(res, "No working directory configured");
-            }
+            if (workDir == null || workDir.isEmpty()) { return error(res, "No working directory configured"); }
 
             String[] files = SystemdService.getDirectoryTree(workDir);
 
