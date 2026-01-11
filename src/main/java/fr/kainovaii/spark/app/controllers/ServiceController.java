@@ -57,7 +57,7 @@ public class ServiceController extends BaseController
     {
         requireLogin(req, res);
 
-        String name = req.queryParams("name");
+        String name = req.queryParams("name").toLowerCase();
         String description = req.queryParams("description");
         String execStart = req.queryParams("execStart");
         String workingDirectory = req.queryParams("workingDirectory");
