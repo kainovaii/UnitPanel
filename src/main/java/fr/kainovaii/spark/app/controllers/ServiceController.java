@@ -35,6 +35,7 @@ public class ServiceController extends BaseController
         get("/admin/services/:id/console", this::console);
         get("/admin/services/:id/editor", this::editor);
         post("/admin/services/create", this::create);
+        post("/admin/services/update", this::update);
         post("/admin/services/delete", this::delete);
     }
 
@@ -63,9 +64,7 @@ public class ServiceController extends BaseController
         String workingDirectory = req.queryParams("workingDirectory");
 
         String unit = name;
-        if (!name.endsWith(".service")) {
-            unit = name + ".service";
-        }
+        if (!name.endsWith(".service")) { unit = name + ".service"; }
 
         SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
         boolean query = serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
@@ -75,6 +74,27 @@ public class ServiceController extends BaseController
         }
 
         return redirectWithFlash(req, res, "success", "Service created successfully", "/admin/services");
+    }
+
+    private Object update(Request req, Response res) throws Exception
+    {
+        requireLogin(req, res);
+
+        int id = Integer.parseInt(req.queryParams("id"));
+        String name = req.queryParams("name").toLowerCase();
+        String description = req.queryParams("description");
+        String execStart = req.queryParams("execStart");
+        String workingDirectory = req.queryParams("workingDirectory");
+
+        String unit = name;
+        if (!name.endsWith(".service")) { unit = name + ".service"; }
+        boolean query = serviceRepository.update(id, name, description, execStart, workingDirectory, unit, true);
+
+        if (!query) {
+            return redirectWithFlash(req, res, "error", "Updating error", "/admin/services/" + id + "/console");
+        }
+
+        return redirectWithFlash(req, res, "success", "Updating successfully", "/admin/services/" + id + "/console");
     }
 
     private Object delete(Request req, Response res) throws Exception

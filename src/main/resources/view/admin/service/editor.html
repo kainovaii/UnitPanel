@@ -87,12 +87,7 @@
                         </div>
                     </template>
 
-                    <textarea x-show="selectedFile"
-                              x-model="content"
-                              class="form-control font-monospace"
-                              style="min-height: 600px; resize: vertical; font-size: 14px; line-height: 1.6; border: none; border-radius: 0;"
-                              spellcheck="false"
-                              @input="modified = true"></textarea>
+                    <textarea x-show="selectedFile" x-model="content" class="form-control font-monospace" style="min-height: 600px; resize: vertical; font-size: 14px; line-height: 1.6; border: none; border-radius: 0;" spellcheck="false" @input="modified = true"></textarea>
                 </div>
                 <div class="card-footer" x-show="selectedFile">
                     <div class="row align-items-center">
@@ -118,21 +113,7 @@
 
 <script>
     function fileEditor(unit) {
-        return {
-            unit: unit,
-            files: [],
-            baseDir: '',
-            selectedFile: null,
-            content: '',
-            originalContent: '',
-            modified: false,
-            loading: true,
-            saving: false,
-            alert: {
-                show: false,
-                type: 'success',
-                message: ''
-            },
+            return { unit: unit, files: [], baseDir: '', selectedFile: null, content: '', originalContent: '', modified: false, loading: true, saving: false, alert: { show: false, type: 'success', message: '' },
 
             async init() {
                 await this.loadFileList();

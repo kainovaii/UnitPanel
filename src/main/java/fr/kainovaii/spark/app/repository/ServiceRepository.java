@@ -21,6 +21,22 @@ public class ServiceRepository
         });
     }
 
+    public boolean update(int id, String name, String description, String execStart, String workingDirectory, String unit, boolean autostart)
+    {
+        return DB.withConnection(() ->
+        {
+            Service service = this.findById(id);
+            if (service == null) return false;
+            service.setName(name);
+            service.setDescription(description);
+            service.setExecStart(execStart);
+            service.setWorkingDirectory(workingDirectory);
+            service.setUnit(unit);
+            service.setAutostart(autostart);
+            return service.saveIt();
+        });
+    }
+
     public LazyList<Service> getAll() { return Service.findAll(); }
 
     public Service findById(int id) { return Service.findById(id); }

@@ -2,6 +2,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="/admin/services/update" method="POST">
+                <input type="hidden" name="id" value="{{ service.id }}">
                 <div class="modal-header">
                     <h5 class="modal-title">Settings</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
