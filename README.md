@@ -41,10 +41,17 @@ UnitPanel is a web-based control panel for managing systemd services, with real-
 
 ## 🖼️ Aperçu
 
-Voici un aperçu du panel :
 
-![Aperçu 1](https://i.ibb.co/XxMdWHtC/Capture-d-cran-2026-01-10-215751.png)
-![Aperçu 2](https://i.ibb.co/S7DJbkvY/Capture-d-cran-2026-01-10-163937.png)
+<table>
+    <tr>
+        <td><img src="https://i.ibb.co/jkBRrYmk/Capture-d-cran-2026-01-11-164400.png" alt="Aperçu 1" width="100%"/></td>
+        <td><img src="https://i.ibb.co/jvQkYbkS/Capture-d-cran-2026-01-11-164257.png" alt="Aperçu 2" width="100%"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://i.ibb.co/Vpq1TzpQ/Capture-d-cran-2026-01-11-164230.png" alt="Aperçu 3" width="100%"/></td>
+        <td><img src="https://i.ibb.co/Zp4mW9fb/Capture-d-cran-2026-01-11-164323.png" alt="Aperçu 4" width="100%"/></td>
+    </tr>
+</table>
 
 ---
 
