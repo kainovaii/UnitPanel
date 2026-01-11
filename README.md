@@ -19,6 +19,7 @@ UnitPanel is a web-based control panel for managing systemd services, with real-
 ## TODO
 - [X] Add delete service
 - [X] Add edit service
+- [ ] Add edit unit file
 - [ ] Add Save backup
 - [X] Fix files not found
 - [X] Files link replace trash in service list

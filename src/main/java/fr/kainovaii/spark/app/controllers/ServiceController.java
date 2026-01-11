@@ -57,61 +57,59 @@ public class ServiceController extends BaseController
     private Object create(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
+        try {
+            String name = req.queryParams("name").toLowerCase();
+            String description = req.queryParams("description");
+            String execStart = req.queryParams("execStart");
+            String workingDirectory = req.queryParams("workingDirectory");
 
-        String name = req.queryParams("name").toLowerCase();
-        String description = req.queryParams("description");
-        String execStart = req.queryParams("execStart");
-        String workingDirectory = req.queryParams("workingDirectory");
+            String unit = name;
+            if (!name.endsWith(".service")) { unit = name + ".service"; }
 
-        String unit = name;
-        if (!name.endsWith(".service")) { unit = name + ".service"; }
+            SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
+            serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
 
-        SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
-        boolean query = serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
-
-        if (!query) {
-            return redirectWithFlash(req, res, "error", "Creating error", "/admin/services");
+            return redirectWithFlash(req, res, "success", "Service created successfully", "/admin/services");
+        } catch (RuntimeException e) {
+            return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");
         }
-
-        return redirectWithFlash(req, res, "success", "Service created successfully", "/admin/services");
     }
 
     private Object update(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
+        try {
+            int id = Integer.parseInt(req.queryParams("id"));
+            String name = req.queryParams("name").toLowerCase();
+            String description = req.queryParams("description");
+            String execStart = req.queryParams("execStart");
+            String workingDirectory = req.queryParams("workingDirectory");
 
-        int id = Integer.parseInt(req.queryParams("id"));
-        String name = req.queryParams("name").toLowerCase();
-        String description = req.queryParams("description");
-        String execStart = req.queryParams("execStart");
-        String workingDirectory = req.queryParams("workingDirectory");
+            String unit = name;
+            if (!name.endsWith(".service")) { unit = name + ".service"; }
+            serviceRepository.update(id, name, description, execStart, workingDirectory, unit, true);
 
-        String unit = name;
-        if (!name.endsWith(".service")) { unit = name + ".service"; }
-        boolean query = serviceRepository.update(id, name, description, execStart, workingDirectory, unit, true);
-
-        if (!query) {
-            return redirectWithFlash(req, res, "error", "Updating error", "/admin/services/" + id + "/console");
+            return redirectWithFlash(req, res, "success", "Updating successfully", "/admin/services/" + id + "/console");
+        } catch (RuntimeException e) {
+            return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");
         }
-
-        return redirectWithFlash(req, res, "success", "Updating successfully", "/admin/services/" + id + "/console");
     }
 
     private Object delete(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
+        try {
 
-        int id = Integer.parseInt(req.queryParams("id"));
-        String name = req.queryParams("name");
+            int id = Integer.parseInt(req.queryParams("id"));
+            String name = req.queryParams("name");
 
-        SystemdService.deleteService(name);
-        boolean query = DB.withConnection(() -> serviceRepository.deleteById(id));
+            SystemdService.deleteService(name);
+            DB.withConnection(() -> serviceRepository.deleteById(id));
 
-        if (!query) {
-            return redirectWithFlash(req, res, "error", "Deleting error", "/admin/services");
+            return redirectWithFlash(req, res, "success", "Service deleted successfully", "/admin/services");
+        } catch (RuntimeException e) {
+            return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");
         }
-
-        return redirectWithFlash(req, res, "success", "Service deleted successfully", "/admin/services");
     }
     
     private Object editor(Request req, Response res)
