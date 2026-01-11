@@ -6,6 +6,8 @@ import fr.kainovaii.spark.app.services.SystemdService;
 import fr.kainovaii.spark.core.database.DB;
 import fr.kainovaii.spark.core.web.controller.BaseController;
 import fr.kainovaii.spark.core.web.controller.Controller;
+import org.javalite.activejdbc.LazyList;
+import org.javalite.activejdbc.Model;
 import spark.Request;
 import spark.Response;
 
@@ -32,6 +34,7 @@ public class ServiceController extends BaseController
         get("/admin/services", this::list);
         get("/admin/services/:id/console", this::console);
         post("/admin/services/create", this::create);
+        get("/admin/services/:id/editor", this::editor);
     }
 
     private Object list(Request req, Response res)
@@ -67,5 +70,20 @@ public class ServiceController extends BaseController
 
         redirectWithFlash(req, res, "success", "Creating success", "/admin/services");
         return true;
+    }
+    
+    private Object editor(Request req, Response res)
+    {
+        requireLogin(req, res);
+        String id = req.params("id");
+        try {
+            List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream() .filter(s -> String.valueOf(s.getId()).equals(id)) .toList() );
+            if (services.isEmpty()) { return error(res, "Service not found"); }
+            Service service = services.get(0);
+            return render("admin/service/editor.html", Map.of("service", service));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return error(res, "Error: " + e.getMessage());
+        }
     }
 }

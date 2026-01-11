@@ -1,0 +1,228 @@
+{% extends "layout/admin.html" %}
+{% block content %}
+<div class="container" x-data="fileEditor('{{ service.unit }}')" x-init="init()">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header d-print-none p-0 mb-3">
+                <div>
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <div class="page-pretitle">File Editor</div>
+                            <h2 class="page-title text-capitalize">{{ service.name }}</h2>
+                        </div>
+                        <div class="col-auto ms-auto d-print-none">
+                            <div class="btn-list">
+                                <button class="btn btn-success" @click="saveFile()" :disabled="saving || !selectedFile">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+                                    <span x-text="saving ? 'Saving...' : 'Save'"></span>
+                                </button>
+                                <a class="btn" href="/admin/services/{{ service.id }}/console">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 7l5 5l-5 5" /><path d="M12 19l7 0" /></svg>
+                                    Console
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="col-md-12" x-show="alert.show" x-transition>
+            <div class="alert" :class="alert.type === 'success' ? 'alert-success' : 'alert-danger'" role="alert">
+                <div class="d-flex">
+                    <div x-html="alert.message"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Files</h3>
+                </div>
+                <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;">
+                    <template x-if="loading">
+                        <div class="text-center p-3">
+                            <div class="spinner-border spinner-border-sm" role="status"></div>
+                            <span class="ms-2">Loading files...</span>
+                        </div>
+                    </template>
+
+                    <template x-if="!loading && files.length === 0">
+                        <div class="text-center p-3 text-muted">
+                            No files found
+                        </div>
+                    </template>
+
+                    <template x-for="file in files" :key="file">
+                        <button @click="loadFile(file)"
+                                class="list-group-item list-group-item-action"
+                                :class="{ 'active': selectedFile === file }">
+                            <div class="d-flex align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon me-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
+                                <span class="text-truncate" x-text="getFileName(file)"></span>
+                            </div>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span x-show="!selectedFile">Select a file to edit</span>
+                        <span x-show="selectedFile" x-text="selectedFile"></span>
+                    </h3>
+                    <div class="card-actions">
+                        <span class="badge bg-blue-lt" x-show="modified">Modified</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <template x-if="!selectedFile">
+                        <div class="text-center p-5 text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-muted mb-3"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /></svg>
+                            <p>Select a file from the list to start editing</p>
+                        </div>
+                    </template>
+
+                    <textarea x-show="selectedFile"
+                              x-model="content"
+                              class="form-control font-monospace"
+                              style="min-height: 600px; resize: vertical; font-size: 14px; line-height: 1.6; border: none; border-radius: 0;"
+                              spellcheck="false"
+                              @input="modified = true"></textarea>
+                </div>
+                <div class="card-footer" x-show="selectedFile">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <span class="text-muted" x-show="modified">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-warning"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" /><path d="M12 16h.01" /></svg>
+                                Unsaved changes
+                            </span>
+                            <span class="text-muted" x-show="!modified">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-success"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                Saved
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <kbd>Ctrl</kbd> + <kbd>S</kbd> to save
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function fileEditor(unit) {
+        return {
+            unit: unit,
+            files: [],
+            baseDir: '',
+            selectedFile: null,
+            content: '',
+            originalContent: '',
+            modified: false,
+            loading: true,
+            saving: false,
+            alert: {
+                show: false,
+                type: 'success',
+                message: ''
+            },
+
+            async init() {
+                await this.loadFileList();
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        if (this.selectedFile) {
+                            this.saveFile();
+                        }
+                    }
+                });
+            },
+
+            async loadFileList() {
+                this.loading = true;
+                try {
+                    const response = await fetch(`/api/systemd/${this.unit}/files`);
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+
+                    this.files = data.files.filter(f => f.trim() !== '');
+                    this.baseDir = data.baseDir;
+                } catch (error) {
+                    console.error('Error loading files:', error);
+                    this.showAlert('danger', 'Failed to load files: ' + error.message);
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            async loadFile(filePath) {
+                try {
+                    const response = await fetch(`/api/systemd/${this.unit}/file?path=${encodeURIComponent(filePath)}`);
+
+                    if (!response.ok) {
+                        throw new Error('Failed to load file');
+                    }
+
+                    this.content = await response.text();
+                    this.originalContent = this.content;
+                    this.selectedFile = filePath;
+                    this.modified = false;
+                } catch (error) {
+                    console.error('Error loading file:', error);
+                    this.showAlert('danger', 'Failed to load file: ' + error.message);
+                }
+            },
+
+            async saveFile() {
+                if (!this.selectedFile) return;
+
+                this.saving = true;
+                try {
+                    const response = await fetch(`/api/systemd/${this.unit}/file?path=${encodeURIComponent(this.selectedFile)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: this.content
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.originalContent = this.content;
+                        this.modified = false;
+                        this.showAlert('success', 'File saved successfully!');
+                    } else {
+                        throw new Error(data.error || 'Failed to save');
+                    }
+                } catch (error) {
+                    console.error('Error saving file:', error);
+                    this.showAlert('danger', 'Failed to save file: ' + error.message);
+                } finally {
+                    this.saving = false;
+                }
+            },
+
+            getFileName(path) {
+                return path.replace(this.baseDir + '/', '');
+            },
+
+            showAlert(type, message) {
+                this.alert = { show: true, type, message };
+                setTimeout(() => this.alert.show = false, 5000);
+            }
+        }
+    }
+</script>
+{% endblock %}
