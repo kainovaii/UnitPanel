@@ -19,7 +19,7 @@ import static spark.Spark.post;
 @Controller
 public class AccountController extends BaseController
 {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public AccountController()
     {

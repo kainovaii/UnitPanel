@@ -17,11 +17,11 @@ import static spark.Spark.post;
 import static spark.Spark.get;
 
 @Controller
-public class SystemdController extends BaseController
+public class SystemdApiController extends BaseController
 {
     private final ServiceRepository serviceRepository;
 
-    public SystemdController()
+    public SystemdApiController()
     {
         initRoutes();
         this.serviceRepository = new ServiceRepository();
@@ -35,9 +35,15 @@ public class SystemdController extends BaseController
         get("/api/systemd/:unit/status", this::status);
         get("/api/systemd/:unit/stats", this::stats);
         get("/api/systemd/stats/total", this::totalStats);
+
         get("/api/systemd/:unit/files", this::listFiles);
         get("/api/systemd/:unit/file", this::getFile);
         post("/api/systemd/:unit/file", this::saveFile);
+
+        get("/api/services", this::getAllServices);
+
+        get("/api/systemd/:unit/service-file", this::getServiceFile);
+        post("/api/systemd/:unit/service-file", this::updateServiceFile);
     }
 
     private Object start(Request req, Response res)
@@ -187,6 +193,70 @@ public class SystemdController extends BaseController
             res.type("application/json");
             res.status(500);
             return "{\"success\":false,\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    private Object getAllServices(Request req, Response res)
+    {
+        requireLogin(req, res);
+        try {
+            List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
+
+            res.type("application/json");
+            return new com.google.gson.Gson().toJson(Map.of(
+                    "success", true,
+                    "data", services,
+                    "total", services.size()
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
+            res.status(500);
+            return error(res, "Failed to fetch services: " + e.getMessage());
+        }
+    }
+
+    private Object getServiceFile(Request req, Response res)
+    {
+        requireLogin(req, res);
+        String unit = req.params("unit");
+        if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
+
+        if (!unit.endsWith(".service")) {
+            unit = unit + ".service";
+        }
+
+        try {
+            String content = SystemdService.readFile("/etc/systemd/system/" + unit);
+            res.type("text/plain");
+            return content;
+        } catch (Exception e) {
+            res.status(500);
+            return error(res, "Failed to read service file: " + e.getMessage());
+        }
+    }
+
+    private Object updateServiceFile(Request req, Response res)
+    {
+        requireLogin(req, res);
+        String unit = req.params("unit");
+        if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
+
+        if (!unit.endsWith(".service")) {
+            unit = unit + ".service";
+        }
+
+        String content = req.body();
+
+        try {
+            SystemdService.writeFile("/etc/systemd/system/" + unit, content);
+
+            SystemdService.exec("sudo", "systemctl", "daemon-reload");
+
+            res.type("application/json");
+            return "{\"success\":true,\"message\":\"Service file updated successfully\"}";
+        } catch (Exception e) {
+            res.status(500);
+            return error(res, "Failed to update service file: " + e.getMessage());
         }
     }
 }

@@ -162,7 +162,7 @@ public class SystemdService
         return String.format("%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0));
     }
 
-    private static String exec(String... cmd)
+    public static String exec(String... cmd)
     {
         try {
             Process p = new ProcessBuilder(cmd).start();
