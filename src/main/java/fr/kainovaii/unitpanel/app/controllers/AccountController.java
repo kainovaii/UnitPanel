@@ -2,9 +2,9 @@ package fr.kainovaii.unitpanel.app.controllers;
 
 import fr.kainovaii.unitpanel.app.models.User;
 import fr.kainovaii.unitpanel.app.repository.UserRepository;
-import fr.kainovaii.unitpanel.core.database.DB;
-import fr.kainovaii.unitpanel.core.web.controller.BaseController;
-import fr.kainovaii.unitpanel.core.web.controller.Controller;
+import fr.kainovaii.core.database.DB;
+import fr.kainovaii.core.web.controller.BaseController;
+import fr.kainovaii.core.web.controller.Controller;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;

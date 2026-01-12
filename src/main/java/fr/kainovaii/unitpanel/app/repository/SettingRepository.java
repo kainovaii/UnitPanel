@@ -1,7 +1,7 @@
 package fr.kainovaii.unitpanel.app.repository;
 
 import fr.kainovaii.unitpanel.app.models.Setting;
-import fr.kainovaii.unitpanel.core.database.DB;
+import fr.kainovaii.core.database.DB;
 import org.javalite.activejdbc.LazyList;
 
 public class SettingRepository

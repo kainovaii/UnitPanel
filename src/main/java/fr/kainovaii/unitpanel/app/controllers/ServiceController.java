@@ -3,9 +3,9 @@ package fr.kainovaii.unitpanel.app.controllers;
 import fr.kainovaii.unitpanel.app.models.Service;
 import fr.kainovaii.unitpanel.app.repository.ServiceRepository;
 import fr.kainovaii.unitpanel.app.services.SystemdService;
-import fr.kainovaii.unitpanel.core.database.DB;
-import fr.kainovaii.unitpanel.core.web.controller.BaseController;
-import fr.kainovaii.unitpanel.core.web.controller.Controller;
+import fr.kainovaii.core.database.DB;
+import fr.kainovaii.core.web.controller.BaseController;
+import fr.kainovaii.core.web.controller.Controller;
 import spark.Request;
 import spark.Response;
 

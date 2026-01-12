@@ -1,4 +1,4 @@
-package fr.kainovaii.unitpanel.core;
+package fr.kainovaii.core;
 
 import io.github.cdimascio.dotenv.Dotenv;
 

@@ -2,9 +2,9 @@ package fr.kainovaii.unitpanel.app.controllers;
 
 import fr.kainovaii.unitpanel.app.models.User;
 import fr.kainovaii.unitpanel.app.repository.UserRepository;
-import fr.kainovaii.unitpanel.core.database.DB;
-import fr.kainovaii.unitpanel.core.web.controller.BaseController;
-import fr.kainovaii.unitpanel.core.web.controller.Controller;
+import fr.kainovaii.core.database.DB;
+import fr.kainovaii.core.web.controller.BaseController;
+import fr.kainovaii.core.web.controller.Controller;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
@@ -58,7 +58,7 @@ public class LoginController extends BaseController
                 session.attribute("logged", true);
                 session.attribute("username", usernameParam);
                 session.attribute("role", user.getRole());
-                res.redirect("/admin");
+                res.redirect("/admin/services");
                 return null;
             }
 

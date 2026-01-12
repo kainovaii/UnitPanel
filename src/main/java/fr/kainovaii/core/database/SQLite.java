@@ -1,4 +1,4 @@
-package fr.kainovaii.unitpanel.core.database;
+package fr.kainovaii.core.database;
 
 import org.javalite.activejdbc.Base;
 

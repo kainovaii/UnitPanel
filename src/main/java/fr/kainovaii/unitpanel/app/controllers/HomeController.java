@@ -1,7 +1,7 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
-import fr.kainovaii.unitpanel.core.web.controller.BaseController;
-import fr.kainovaii.unitpanel.core.web.controller.Controller;
+import fr.kainovaii.core.web.controller.BaseController;
+import fr.kainovaii.core.web.controller.Controller;
 import spark.Request;
 import spark.Response;
 
@@ -16,11 +16,18 @@ public class HomeController extends BaseController
     private void initRoutes()
     {
         get("/", this::homepage);
+        get("/admin", this::root);
     }
 
     private Object homepage(Request req, Response res)
     {
-        res.redirect("/admin");
+        res.redirect("/admin/services");
         return true;
     }
+    private Object root(Request req, Response res)
+    {
+        res.redirect("/admin/services");
+        return true;
+    }
+
 }

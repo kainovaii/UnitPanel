@@ -1,7 +1,7 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
-import fr.kainovaii.unitpanel.core.web.controller.BaseController;
-import fr.kainovaii.unitpanel.core.web.controller.Controller;
+import fr.kainovaii.core.web.controller.BaseController;
+import fr.kainovaii.core.web.controller.Controller;
 import spark.Request;
 import spark.Response;
 

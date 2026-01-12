@@ -1,4 +1,4 @@
-package fr.kainovaii.unitpanel.core.web.controller;
+package fr.kainovaii.core.web.controller;
 
 import org.reflections.Reflections;
 

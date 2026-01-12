@@ -1,8 +1,8 @@
-package fr.kainovaii.unitpanel.core.web;
+package fr.kainovaii.core.web;
 
 import fr.kainovaii.unitpanel.app.controllers.GlobalAdviceController;
-import fr.kainovaii.unitpanel.core.web.controller.ControllerLoader;
-import fr.kainovaii.unitpanel.core.Spark;
+import fr.kainovaii.core.web.controller.ControllerLoader;
+import fr.kainovaii.core.Spark;
 
 import static spark.Spark.*;
 

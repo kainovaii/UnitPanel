@@ -1,8 +1,8 @@
-package fr.kainovaii.unitpanel.core.web.controller;
+package fr.kainovaii.core.web.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.kainovaii.unitpanel.core.web.template.TemplateManager;
+import fr.kainovaii.core.web.template.TemplateManager;
 import spark.*;
 
 import java.util.HashMap;

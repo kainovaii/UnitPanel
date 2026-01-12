@@ -1,4 +1,4 @@
-package fr.kainovaii.unitpanel.core.web.template;
+package fr.kainovaii.core.web.template;
 
 import spark.ModelAndView;
 import spark.TemplateEngine;

@@ -1,10 +1,10 @@
-package fr.kainovaii.unitpanel.core;
+package fr.kainovaii.core;
 
 import fr.kainovaii.unitpanel.app.models.Setting;
 import fr.kainovaii.unitpanel.app.repository.SettingRepository;
 import fr.kainovaii.unitpanel.app.repository.UserRepository;
-import fr.kainovaii.unitpanel.core.database.SQLite;
-import fr.kainovaii.unitpanel.core.web.WebServer;
+import fr.kainovaii.core.database.SQLite;
+import fr.kainovaii.core.web.WebServer;
 import org.javalite.activejdbc.LazyList;
 
 import java.util.logging.Logger;
