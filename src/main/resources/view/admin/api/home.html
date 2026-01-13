@@ -134,58 +134,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- POST /api/auth/token -->
-            <div class="col-lg-6" id="endpoint-auth-generate">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <span class="badge bg-green me-2">POST</span>
-                            /api/auth/token
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Generate a new API token. <strong>Requires being logged in to the web interface.</strong></p>
-
-                        <h4 class="mt-4">Request example</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.yourdomain.com/api/auth/token" \
-  -H "Cookie: JSESSIONID=your-session-id"</code></pre>
-
-                        <h4 class="mt-4">Response</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>{
-  "success": true,
-  "token": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "expiresAt": "2027-01-13T12:00:00"
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DELETE /api/auth/token -->
-            <div class="col-lg-6" id="endpoint-auth-revoke">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <span class="badge bg-red me-2">DELETE</span>
-                            /api/auth/token
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Revoke the token used in the request.</p>
-
-                        <h4 class="mt-4">Request example</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X DELETE "https://api.yourdomain.com/api/auth/token" \
-  -H "Authorization: Bearer a1b2c3d4-e5f6-7890-abcd-ef1234567890"</code></pre>
-
-                        <h4 class="mt-4">Response</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>{
-  "success": true,
-  "message": "Token revoked successfully"
-}</code></pre>
-                    </div>
-                </div>
-            </div>
-
+            
             <!-- POST /api/systemd/:unit/start -->
             <div class="col-lg-6" id="endpoint-start">
                 <div class="card">
