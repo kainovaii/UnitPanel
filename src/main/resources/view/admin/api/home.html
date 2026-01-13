@@ -23,17 +23,31 @@
         </div>
 
         <div class="row row-deck row-cards">
+            <!-- Authentication Section -->
+            <div class="col-12">
+                <div class="card bg-blue-lt">
+                    <div class="card-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" /><path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M8 11v-4a4 4 0 1 1 8 0v4" /></svg>
+                        <h3 class="card-title">API Token</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Generate an API token to use with external applications.</p>
+                        <a href="/account" class="btn btn-primary" id="generateTokenBtn">Generate New Token</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Endpoints -->
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Endpoints disponibles</h3>
+                        <h3 class="card-title">Available Endpoints</h3>
                     </div>
                     <div class="card-table table-responsive">
                         <table class="table table-vcenter">
                             <thead>
                             <tr>
-                                <th>Méthode</th>
+                                <th>Method</th>
                                 <th>Endpoint</th>
                                 <th>Description</th>
                                 <th class="w-1"></th>
@@ -41,82 +55,133 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td colspan="4" class=""><strong>Gestion des Services</strong></td>
+                                <td colspan="4" class=""><strong>Service Management</strong></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-green">POST</span></td>
                                 <td><code>/api/systemd/:unit/start</code></td>
-                                <td>Démarrer un service systemd</td>
-                                <td><a href="#endpoint-start">Voir</a></td>
+                                <td>Start a systemd service</td>
+                                <td><a href="#endpoint-start">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-green">POST</span></td>
                                 <td><code>/api/systemd/:unit/stop</code></td>
-                                <td>Arrêter un service systemd</td>
-                                <td><a href="#endpoint-stop">Voir</a></td>
+                                <td>Stop a systemd service</td>
+                                <td><a href="#endpoint-stop">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/status</code></td>
-                                <td>Obtenir le statut d'un service</td>
-                                <td><a href="#endpoint-status">Voir</a></td>
+                                <td>Get service status</td>
+                                <td><a href="#endpoint-status">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/logs</code></td>
-                                <td>Récupérer les logs d'un service</td>
-                                <td><a href="#endpoint-logs">Voir</a></td>
+                                <td>Retrieve service logs</td>
+                                <td><a href="#endpoint-logs">View</a></td>
                             </tr>
                             <tr>
-                                <td colspan="4" class=""><strong>Statistiques</strong></td>
+                                <td colspan="4" class=""><strong>Statistics</strong></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/stats</code></td>
-                                <td>Statistiques d'un service spécifique</td>
-                                <td><a href="#endpoint-stats">Voir</a></td>
+                                <td>Statistics for a specific service</td>
+                                <td><a href="#endpoint-stats">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/stats/total</code></td>
-                                <td>Statistiques totales des services</td>
-                                <td><a href="#endpoint-total-stats">Voir</a></td>
+                                <td>Total statistics for services</td>
+                                <td><a href="#endpoint-total-stats">View</a></td>
                             </tr>
                             <tr>
-                                <td colspan="4" class=""><strong>Gestion des Fichiers</strong></td>
+                                <td colspan="4" class=""><strong>File Management</strong></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/files</code></td>
-                                <td>Lister les fichiers du répertoire de travail</td>
-                                <td><a href="#endpoint-files">Voir</a></td>
+                                <td>List files in working directory</td>
+                                <td><a href="#endpoint-files">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/file</code></td>
-                                <td>Lire le contenu d'un fichier</td>
-                                <td><a href="#endpoint-get-file">Voir</a></td>
+                                <td>Read file content</td>
+                                <td><a href="#endpoint-get-file">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-green">POST</span></td>
                                 <td><code>/api/systemd/:unit/file</code></td>
-                                <td>Sauvegarder un fichier</td>
-                                <td><a href="#endpoint-save-file">Voir</a></td>
+                                <td>Save a file</td>
+                                <td><a href="#endpoint-save-file">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/service-file</code></td>
-                                <td>Lire un fichier .service</td>
-                                <td><a href="#endpoint-service-file-get">Voir</a></td>
+                                <td>Read a .service file</td>
+                                <td><a href="#endpoint-service-file-get">View</a></td>
                             </tr>
                             <tr>
                                 <td><span class="badge bg-green">POST</span></td>
                                 <td><code>/api/systemd/:unit/service-file</code></td>
-                                <td>Modifier un fichier .service</td>
-                                <td><a href="#endpoint-service-file-update">Voir</a></td>
+                                <td>Update a .service file</td>
+                                <td><a href="#endpoint-service-file-update">View</a></td>
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST /api/auth/token -->
+            <div class="col-lg-6" id="endpoint-auth-generate">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="badge bg-green me-2">POST</span>
+                            /api/auth/token
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Generate a new API token. <strong>Requires being logged in to the web interface.</strong></p>
+
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.yourdomain.com/api/auth/token" \
+  -H "Cookie: JSESSIONID=your-session-id"</code></pre>
+
+                        <h4 class="mt-4">Response</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>{
+  "success": true,
+  "token": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "expiresAt": "2027-01-13T12:00:00"
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELETE /api/auth/token -->
+            <div class="col-lg-6" id="endpoint-auth-revoke">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="badge bg-red me-2">DELETE</span>
+                            /api/auth/token
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Revoke the token used in the request.</p>
+
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X DELETE "https://api.yourdomain.com/api/auth/token" \
+  -H "Authorization: Bearer a1b2c3d4-e5f6-7890-abcd-ef1234567890"</code></pre>
+
+                        <h4 class="mt-4">Response</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>{
+  "success": true,
+  "message": "Token revoked successfully"
+}</code></pre>
                     </div>
                 </div>
             </div>
@@ -131,12 +196,13 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Démarre un service systemd spécifique.</p>
+                        <p class="text-muted">Start a specific systemd service.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.votredomaine.com/api/systemd/nginx/start"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.yourdomain.com/api/systemd/nginx/start" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "success": true
 }</code></pre>
@@ -154,12 +220,13 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Arrête un service systemd spécifique.</p>
+                        <p class="text-muted">Stop a specific systemd service.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.votredomaine.com/api/systemd/nginx/stop"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.yourdomain.com/api/systemd/nginx/stop" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "success": true
 }</code></pre>
@@ -177,12 +244,13 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Récupère le statut actuel d'un service systemd.</p>
+                        <p class="text-muted">Get the current status of a systemd service.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/nginx/status"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/nginx/status" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "status": "active"
 }</code></pre>
@@ -200,13 +268,14 @@
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Récupère les logs d'un service (200 dernières lignes).</p>
+                        <p class="text-muted">Retrieve service logs (last 200 lines).</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/nginx/logs"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/nginx/logs" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Format de réponse</h4>
-                        <p class="text-muted">Réponse en <code>text/plain</code> contenant les logs.</p>
+                        <h4 class="mt-4">Response format</h4>
+                        <p class="text-muted">Response in <code>text/plain</code> containing the logs.</p>
                         <pre class="bg-dark text-white p-3 rounded"><code>Status: active
 Jan 12 10:30:00 server nginx[1234]: Starting nginx...
 Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
@@ -224,12 +293,13 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Statistiques CPU et RAM d'un service.</p>
+                        <p class="text-muted">CPU and RAM statistics for a service.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/nginx/stats"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/nginx/stats" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "cpu": 2.5,
   "mem": 1.8,
@@ -249,24 +319,25 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Statistiques totales. Sans paramètres, agrège tous les services en BDD.</p>
+                        <p class="text-muted">Total statistics. Without parameters, aggregates all services in the database.</p>
 
-                        <h4 class="mt-4">Paramètres (optionnel)</h4>
+                        <h4 class="mt-4">Parameters (optional)</h4>
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <tbody>
                                 <tr>
                                     <td><code>units</code></td>
-                                    <td>Liste séparée par virgules (ex: nginx,postgresql)</td>
+                                    <td>Comma-separated list (e.g., nginx,postgresql)</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/stats/total?units=nginx,postgresql"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/stats/total?units=nginx,postgresql" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "cpu": 8.75,
   "mem": 12.50,
@@ -287,12 +358,13 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Liste l'arborescence des fichiers du répertoire de travail.</p>
+                        <p class="text-muted">List the file tree of the working directory.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/nginx/files"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/nginx/files" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "files": [
     "/var/www/index.html",
@@ -314,25 +386,26 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Lit le contenu d'un fichier.</p>
+                        <p class="text-muted">Read the content of a file.</p>
 
-                        <h4 class="mt-4">Paramètres</h4>
+                        <h4 class="mt-4">Parameters</h4>
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <tbody>
                                 <tr>
                                     <td><code>path</code></td>
-                                    <td>Chemin complet du fichier</td>
+                                    <td>Full path to the file</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/nginx/file?path=/var/www/index.html"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/nginx/file?path=/var/www/index.html" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
-                        <p class="text-muted">Contenu brut du fichier en <code>text/plain</code>.</p>
+                        <h4 class="mt-4">Response</h4>
+                        <p class="text-muted">Raw file content in <code>text/plain</code>.</p>
                     </div>
                 </div>
             </div>
@@ -347,29 +420,30 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Sauvegarde le contenu d'un fichier.</p>
+                        <p class="text-muted">Save file content.</p>
 
-                        <h4 class="mt-4">Paramètres</h4>
+                        <h4 class="mt-4">Parameters</h4>
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <tbody>
                                 <tr>
                                     <td><code>path</code></td>
-                                    <td>Chemin complet du fichier (query param)</td>
+                                    <td>Full path to the file (query param)</td>
                                 </tr>
                                 <tr>
                                     <td><code>body</code></td>
-                                    <td>Contenu à écrire (body)</td>
+                                    <td>Content to write (body)</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.votredomaine.com/api/systemd/nginx/file?path=/var/www/index.html" \
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.yourdomain.com/api/systemd/nginx/file?path=/var/www/index.html" \
+  -H "Authorization: Bearer your-token" \
   --data-binary @index.html</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "success": true,
   "message": "File saved successfully"
@@ -388,12 +462,13 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Lit le contenu d'un fichier .service depuis <code>/etc/systemd/system/</code>.</p>
+                        <p class="text-muted">Read a .service file from <code>/etc/systemd/system/</code>.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.votredomaine.com/api/systemd/nginx/service-file"</code></pre>
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X GET "https://api.yourdomain.com/api/systemd/nginx/service-file" \
+  -H "Authorization: Bearer your-token"</code></pre>
 
-                        <h4 class="mt-4">Réponse (text/plain)</h4>
+                        <h4 class="mt-4">Response (text/plain)</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>[Unit]
 Description=Nginx Web Server
 After=network.target
@@ -422,17 +497,18 @@ WantedBy=multi-user.target</code></pre>
                         </h3>
                     </div>
                     <div class="card-body">
-                        <p class="text-muted">Modifie un fichier .service et recharge systemd automatiquement.</p>
+                        <p class="text-muted">Update a .service file and automatically reload systemd.</p>
 
-                        <h4 class="mt-4">Corps de la requête</h4>
-                        <p class="text-muted">Envoyer le contenu complet du fichier .service en <code>text/plain</code> dans le body.</p>
+                        <h4 class="mt-4">Request body</h4>
+                        <p class="text-muted">Send the complete .service file content as <code>text/plain</code> in the body.</p>
 
-                        <h4 class="mt-4">Exemple de requête</h4>
-                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.votredomaine.com/api/systemd/nginx/service-file" \
+                        <h4 class="mt-4">Request example</h4>
+                        <pre class="bg-dark text-white p-3 rounded"><code>curl -X POST "https://api.yourdomain.com/api/systemd/nginx/service-file" \
+  -H "Authorization: Bearer your-token" \
   -H "Content-Type: text/plain" \
   --data-binary @nginx.service</code></pre>
 
-                        <h4 class="mt-4">Réponse</h4>
+                        <h4 class="mt-4">Response</h4>
                         <pre class="bg-dark text-white p-3 rounded"><code>{
   "success": true,
   "message": "Service file updated successfully"
