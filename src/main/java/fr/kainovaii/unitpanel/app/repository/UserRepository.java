@@ -5,6 +5,7 @@ import org.javalite.activejdbc.LazyList;
 
 public class UserRepository
 {
+
     public void create(String username, String password, String role)
     {
         User user = new User();
@@ -24,13 +25,13 @@ public class UserRepository
         return User.findFirst("username = ?", username) != null;
     }
 
-    public LazyList<User> getAll() {
-
-        return User.findAll();
-    }
+    public LazyList<User> getAll() { return User.findAll(); }
 
     public User findByUsername(String username)
     {
         return User.findFirst("username = ?", username);
     }
+
+
+    public static User findById(int id) { return User.findFirst("id = ?", id); }
 }

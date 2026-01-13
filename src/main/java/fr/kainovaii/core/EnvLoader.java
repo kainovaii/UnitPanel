@@ -24,9 +24,9 @@ public class EnvLoader
             if (!Files.exists(targetFile)) copyDefaultEnv(targetFile);
 
             dotenv = Dotenv.configure()
-                    .directory(TARGET_DIR)
-                    .filename(TARGET_FILE)
-                    .load();
+                .directory(TARGET_DIR)
+                .filename(TARGET_FILE)
+                .load();
 
         } catch (IOException e) { throw new RuntimeException("Erreur lors du chargement du fichier .env", e); }
     }

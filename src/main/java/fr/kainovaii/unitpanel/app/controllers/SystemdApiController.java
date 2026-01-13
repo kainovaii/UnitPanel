@@ -23,6 +23,7 @@ public class SystemdApiController extends BaseController
 
     public SystemdApiController()
     {
+        super();
         initRoutes();
         this.serviceRepository = new ServiceRepository();
     }
@@ -48,7 +49,8 @@ public class SystemdApiController extends BaseController
 
     private Object start(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}} else {requireToken(req, res);}
+            
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -58,7 +60,7 @@ public class SystemdApiController extends BaseController
 
     private Object stop(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -68,7 +70,7 @@ public class SystemdApiController extends BaseController
 
     private Object logs(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -78,7 +80,7 @@ public class SystemdApiController extends BaseController
 
     private Object status(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -89,7 +91,7 @@ public class SystemdApiController extends BaseController
 
     private Object stats(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -106,7 +108,7 @@ public class SystemdApiController extends BaseController
 
     private Object totalStats(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         try {
             String unitsParam = req.queryParams("units");
             List<String> units;
@@ -136,7 +138,7 @@ public class SystemdApiController extends BaseController
 
     private Object listFiles(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -162,7 +164,7 @@ public class SystemdApiController extends BaseController
 
     private Object getFile(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String filePath = req.queryParams("path");
         if (filePath == null || filePath.isEmpty()) return error(res, "Missing file path");
 
@@ -178,7 +180,7 @@ public class SystemdApiController extends BaseController
 
     private Object saveFile(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String filePath = req.queryParams("path");
         if (filePath == null || filePath.isEmpty()) return error(res, "Missing file path");
 
@@ -198,7 +200,7 @@ public class SystemdApiController extends BaseController
 
     private Object getAllServices(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         try {
             List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
 
@@ -217,7 +219,7 @@ public class SystemdApiController extends BaseController
 
     private Object getServiceFile(Request req, Response res)
     {
-        requireLogin(req, res);
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
@@ -237,7 +239,7 @@ public class SystemdApiController extends BaseController
 
     private Object updateServiceFile(Request req, Response res)
     {
-        requireLogin(req, res);
+        
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 

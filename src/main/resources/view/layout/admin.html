@@ -51,10 +51,9 @@
                                 </a>
                             </div>
                         </div>
-                        {% for user in loggedUser %}
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Open user menu">
-                                {% if user.role == "ADMIN" %}
+                                {% if loggedUser.role == "ADMIN" %}
                                 <span class="avatar avatar-2 avatar-sm bg-pink-lt">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon avatar-icon icon-2">
                                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -62,7 +61,7 @@
                                     </svg>
                                 </span>
                                 {% endif %}
-                                {% if user.role == "MODO" %}
+                                {% if loggedUser.role == "MODO" %}
                                 <span class="avatar avatar-2 avatar-sm bg-blue-lt">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon avatar-icon icon-2">
                                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -71,9 +70,9 @@
                                 </span>
                                 {% endif %}
                                 <div class="d-none d-xl-block ps-2">
-                                    <div><span>{{ user.username }}</span></div>
+                                    <div><span>{{ loggedUser.username }}</span></div>
                                     <div class="mt-1 small">
-                                        <span>{{ user.role }}</span>
+                                        <span>{{ loggedUser.role }}</span>
                                     </div>
                                 </div>
                             </a>
@@ -83,7 +82,6 @@
                                 <a href="/logout" class="dropdown-item">Logout</a>
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
             </header>

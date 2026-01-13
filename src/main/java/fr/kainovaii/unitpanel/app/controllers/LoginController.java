@@ -48,7 +48,8 @@ public class LoginController extends BaseController
         String passwordParam = req.queryParams("password");
         Session session = req.session(true);
 
-        DB.withConnection(() -> {
+        return DB.withConnection(() ->
+        {
             if (!UserRepository.userExist(usernameParam)) redirectWithFlash(req,  res, "error", "User not found", "/login");
 
             User user = userRepository.findByUsername(usernameParam);
@@ -56,26 +57,18 @@ public class LoginController extends BaseController
             if (BCrypt.checkpw(passwordParam, user.getPassword()))
             {
                 session.attribute("logged", true);
-                session.attribute("username", usernameParam);
-                session.attribute("role", user.getRole());
+                session.attribute("id", user.getId());
                 res.redirect("/admin/services");
-                return null;
+                return true;
             }
-
-            redirectWithFlash(req,  res, "error", "Incorect login", "/login");
-
-            return null;
+            return redirectWithFlash(req,  res, "error", "Incorect login", "/login");
         });
-        return false;
     }
 
     private Object logout(Request req, Response res)
     {
         Session session = req.session(true);
-        if (isLogged(req)) {
-            session.invalidate();
-        }
-        res.redirect("/");
-        return null;
+        if (isLogged(req)) { session.invalidate(); }
+        return redirectWithFlash(req,  res, "success", "Success logout", "/login");
     }
 }

@@ -13,17 +13,17 @@ public class ControllerLoader
         Reflections reflections = new Reflections("fr.kainovaii.unitpanel.app.controllers");
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
         controllerClasses.stream()
-            .map(cls -> {
-                try {
-                   
-                    return cls.getDeclaredConstructor().newInstance();
-                } catch (Exception e) {
-                    System.err.println("Impossible d’instancier le controller : " + cls.getName());
-                    e.printStackTrace();
-                    return null;
-                }
-            })
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+        .map(cls -> {
+            try {
+
+                return cls.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                System.err.println("Impossible d’instancier le controller : " + cls.getName());
+                e.printStackTrace();
+                return null;
+            }
+        })
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
     }
 }

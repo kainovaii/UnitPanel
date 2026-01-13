@@ -2,6 +2,7 @@ package fr.kainovaii.unitpanel.app.controllers;
 
 import fr.kainovaii.core.web.controller.BaseController;
 import spark.Request;
+import spark.Response;
 import spark.Session;
 
 import java.util.Collections;
@@ -11,19 +12,10 @@ import java.util.Optional;
 
 public class GlobalAdviceController extends BaseController
 {
-    record User(String username, String role) {}
-
     public static void applyGlobals(Request req)
     {
-        Session session = req.session(true);
-
-        String username = Optional.ofNullable(session.attribute("username")).orElse("Invité").toString();
-        String role = Optional.ofNullable(session.attribute("role")).orElse("").toString();
-        List<User> loggedUser = Collections.singletonList(new User(username, role));
-
-        setGlobal("title", "The Guardian");
         setGlobal("isLogged", isLogged(req));
-        setGlobal("loggedUser", loggedUser);
+        if (isLogged(req)) setGlobal("loggedUser", getLoggedUser(req));
 
         Map<String, String> flashes = collectFlashes(req);
         setGlobal("flashes", flashes);

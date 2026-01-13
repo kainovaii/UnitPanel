@@ -71,7 +71,17 @@ public class SQLite
             admin_exist INTEGER NOT NULL UNIQUE
         )
         """);
-        logger.info("Tables SQLite créées ou existantes vérifiées.");
+        Base.exec("""
+        CREATE TABLE IF NOT EXISTS api_tokens(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            token TEXT NOT NULL UNIQUE,
+            user_id INTEGER NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            expires_at TEXT NOT NULL
+        )
+        """);
+
+        logger.info("SQLite tables created or existing verified.");
     }
 
     public void close() {
