@@ -25150,4 +25150,37 @@ Antialiasing
 .hero-description {
     font-size: 20px;
 }
+
+.navbar {
+    margin-bottom: 0 !important;
+}
+
+.page-wrapper {
+    padding-top: 0 !important;
+}
+
+.page-wrapper > .container:first-child {
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden;
+}
+
+.page-body {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100%;
+}
+
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 /*# sourceMappingURL=tabler.css.map */
