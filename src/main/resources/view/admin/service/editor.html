@@ -1,4 +1,4 @@
-{% extends "layout/admin.html" %}
+{% extends "layout/verticale.html" %}
 {% block content %}
 <div class="container" x-data="fileEditor('{{ service.unit }}')" x-init="init()">
     <div class="row">
@@ -40,7 +40,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Files</h3>
                 </div>
-                <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;">
+                <div class="list-group list-group-flush" style="max-height: 460px; overflow-y: auto;">
                     <template x-if="loading">
                         <div class="text-center p-3">
                             <div class="spinner-border spinner-border-sm" role="status"></div>
@@ -69,7 +69,7 @@
         </div>
 
         <div class="col-md-9">
-            <div class="card">
+            <div class="card" style="max-height: 530px; overflow-y: auto;">
                 <div class="card-header">
                     <h3 class="card-title">
                         <span x-show="!selectedFile">Select a file to edit</span>
@@ -87,8 +87,9 @@
                         </div>
                     </template>
 
-                    <textarea x-show="selectedFile" x-model="content" class="form-control font-monospace" style="min-height: 600px; resize: vertical; font-size: 14px; line-height: 1.6; border: none; border-radius: 0;" spellcheck="false" @input="modified = true"></textarea>
+                    <textarea x-show="selectedFile" x-model="content" class="form-control font-monospace" style="min-height: 405px; resize: vertical; font-size: 14px; line-height: 1.6; border: none; border-radius: 0;" spellcheck="false" @input="modified = true"></textarea>
                 </div>
+
                 <div class="card-footer" x-show="selectedFile">
                     <div class="row align-items-center">
                         <div class="col">
