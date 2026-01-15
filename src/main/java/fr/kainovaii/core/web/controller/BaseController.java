@@ -3,6 +3,7 @@ package fr.kainovaii.core.web.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.kainovaii.core.database.DB;
+import fr.kainovaii.core.security.RoleChecker;
 import fr.kainovaii.core.web.ApiResponse;
 import fr.kainovaii.core.web.template.TemplateManager;
 import fr.kainovaii.unitpanel.app.models.ApiToken;
@@ -10,6 +11,7 @@ import fr.kainovaii.unitpanel.app.models.User;
 import fr.kainovaii.unitpanel.app.repository.ApiTokenRepository;
 import spark.*;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 import static spark.Spark.halt;
@@ -17,6 +19,7 @@ import static spark.Spark.halt;
 public class BaseController extends ApiResponse
 {
     private static final ObjectMapper mapper = new ObjectMapper();
+    private final Queue<String> methodQueue = new LinkedList<>();
 
     protected static boolean isLogged(Request req)
     {
@@ -90,7 +93,7 @@ public class BaseController extends ApiResponse
         return null;
     }
 
-    protected void setFlash(Request req, String key, String message)
+    protected static void setFlash(Request req, String key, String message)
     {
         Session session = req.session();
         session.attribute("flash_" + key, message);
@@ -112,7 +115,7 @@ public class BaseController extends ApiResponse
         return flashes;
     }
 
-    protected Object redirectWithFlash(Request req, Response res, String type, String message, String location)
+    protected static Object redirectWithFlash(Request req, Response res, String type, String message, String location)
     {
         setFlash(req, type, message);
         res.redirect(location);
@@ -129,17 +132,5 @@ public class BaseController extends ApiResponse
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    protected String render(String template) {
-        return render(template, Map.of());
-    }
-
-    protected static void setGlobal(String key, Object value) {
-        TemplateManager.setGlobal(key, value);
-    }
-
-    public static JsonNode toJson(String text) throws Exception {
-        return mapper.readTree(text);
     }
 }

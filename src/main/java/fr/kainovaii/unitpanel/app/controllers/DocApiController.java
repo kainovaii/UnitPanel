@@ -2,6 +2,7 @@ package fr.kainovaii.unitpanel.app.controllers;
 
 import fr.kainovaii.core.web.controller.BaseController;
 import fr.kainovaii.core.web.controller.Controller;
+import fr.kainovaii.core.web.methods.GET;
 import spark.Request;
 import spark.Response;
 
@@ -12,13 +13,7 @@ import static spark.Spark.get;
 @Controller
 public class DocApiController extends BaseController
 {
-    public DocApiController() { initRoutes(); }
-
-    private void initRoutes()
-    {
-        get("/admin/api", this::home);
-    }
-
+    @GET("/admin/api")
     private Object home(Request req, Response res)
     {
         requireLogin(req, res);

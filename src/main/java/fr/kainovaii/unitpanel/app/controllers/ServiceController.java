@@ -1,5 +1,7 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.web.methods.GET;
+import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.Service;
 import fr.kainovaii.unitpanel.app.repository.ServiceRepository;
 import fr.kainovaii.unitpanel.app.services.SystemdService;
@@ -20,22 +22,9 @@ public class ServiceController extends BaseController
 {
     private final ServiceRepository serviceRepository;
 
-    public ServiceController()
-    {
-        initRoutes();
-        this.serviceRepository = new ServiceRepository();
-    }
+    public ServiceController() { this.serviceRepository = new ServiceRepository(); }
 
-    private void initRoutes()
-    {
-        get("/admin/services", this::list);
-        get("/admin/services/:id/console", this::console);
-        get("/admin/services/:id/editor", this::editor);
-        post("/admin/services/create", this::create);
-        post("/admin/services/update", this::update);
-        post("/admin/services/delete", this::delete);
-    }
-
+    @GET("/admin/services")
     private Object list(Request req, Response res)
     {
         requireLogin(req, res);
@@ -43,6 +32,7 @@ public class ServiceController extends BaseController
         return render("admin/service/list.html", Map.of("services", services));
     }
 
+    @GET("/admin/services/:id/console")
     private Object console(Request req, Response res)
     {
         requireLogin(req, res);
@@ -51,6 +41,7 @@ public class ServiceController extends BaseController
         return render("admin/service/console.html", Map.of("service", service));
     }
 
+    @POST("/admin/services/create")
     private Object create(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
@@ -72,6 +63,7 @@ public class ServiceController extends BaseController
         }
     }
 
+    @POST("/admin/services/update")
     private Object update(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
@@ -92,11 +84,11 @@ public class ServiceController extends BaseController
         }
     }
 
+    @POST("/admin/services/delete")
     private Object delete(Request req, Response res) throws Exception
     {
         requireLogin(req, res);
         try {
-
             int id = Integer.parseInt(req.queryParams("id"));
             String name = req.queryParams("name");
 
@@ -108,7 +100,8 @@ public class ServiceController extends BaseController
             return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");
         }
     }
-    
+
+    @GET("/admin/services/:id/editor")
     private Object editor(Request req, Response res)
     {
         requireLogin(req, res);

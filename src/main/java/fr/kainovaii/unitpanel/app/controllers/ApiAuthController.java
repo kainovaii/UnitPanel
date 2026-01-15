@@ -1,6 +1,8 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
 import fr.kainovaii.core.database.DB;
+import fr.kainovaii.core.web.methods.DELETE;
+import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.core.web.controller.BaseController;
 import fr.kainovaii.core.web.controller.Controller;
 import fr.kainovaii.unitpanel.app.models.ApiToken;
@@ -19,16 +21,9 @@ public class ApiAuthController extends BaseController
     public ApiAuthController()
     {
         this.apiTokenRepository = new ApiTokenRepository();
-        initRoutes();
     }
 
-    private void initRoutes()
-    {
-        post("/api/auth/token", this::generateToken);
-        delete("/api/auth/token", this::removeToken);
-        post("/api/auth/token/:token/revoke", this::revokeToken);
-    }
-
+    @POST("/api/auth/token")
     private Object generateToken(Request req, Response res)
     {
         requireLogin(req, res);
@@ -41,9 +36,9 @@ public class ApiAuthController extends BaseController
             res.type("application/json");
             res.redirect("/account");
             return new com.google.gson.Gson().toJson(Map.of(
-                    "success", true,
-                    "token", token.getToken(),
-                    "expiresAt", token.getExpiresAt().toString()
+                "success", true,
+                "token", token.getToken(),
+                "expiresAt", token.getExpiresAt().toString()
             ));
         } catch (Exception e) {
             res.status(500);
@@ -51,6 +46,7 @@ public class ApiAuthController extends BaseController
         }
     }
 
+    @DELETE("/api/auth/token")
     private Object removeToken(Request req, Response res)
     {
         try {
@@ -68,6 +64,7 @@ public class ApiAuthController extends BaseController
         }
     }
 
+    @POST("/api/auth/token/:token/revoke")
     private Object revokeToken(Request req, Response res)
     {
         try {

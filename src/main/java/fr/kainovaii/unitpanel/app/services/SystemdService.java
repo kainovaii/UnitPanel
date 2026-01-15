@@ -10,16 +10,12 @@ public class SystemdService
 
     public static void start(String unit)
     {
-        System.out.println("Starting service: " + unit);
-        String result = exec("sudo", "systemctl", "start", unit);
-        System.out.println("Start result: " + result);
+        exec("sudo", "systemctl", "start", unit);
     }
 
     public static void stop(String unit)
     {
-        System.out.println("Stopping service: " + unit);
-        String result = exec("sudo", "systemctl", "stop", unit);
-        System.out.println("Stop result: " + result);
+        exec("sudo", "systemctl", "stop", unit);
     }
 
     public static String logs(String unit)
@@ -162,23 +158,6 @@ public class SystemdService
         return String.format("%.2f GB", bytes / (1024.0 * 1024.0 * 1024.0));
     }
 
-    public static String exec(String... cmd)
-    {
-        try {
-            Process p = new ProcessBuilder(cmd).start();
-            p.waitFor();
-
-            String error = new String(p.getErrorStream().readAllBytes());
-            if (!error.isEmpty()) {
-                System.err.println("Error: " + error);
-            }
-
-            return new String(p.getInputStream().readAllBytes());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static class ServiceStats
     {
         public final double cpu;
@@ -223,5 +202,22 @@ public class SystemdService
     {
         String output = exec("sudo", "find", directory, "-type", "f", "-not", "-path", "*/.*");
         return output.split("\n");
+    }
+
+    public static String exec(String... cmd)
+    {
+        try {
+            Process p = new ProcessBuilder(cmd).start();
+            p.waitFor();
+
+            String error = new String(p.getErrorStream().readAllBytes());
+            if (!error.isEmpty()) {
+                System.err.println("Error: " + error);
+            }
+
+            return new String(p.getInputStream().readAllBytes());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

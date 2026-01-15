@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static fr.kainovaii.core.web.template.TemplateManager.setGlobal;
+
 public class GlobalAdviceController extends BaseController
 {
     public static void applyGlobals(Request req)

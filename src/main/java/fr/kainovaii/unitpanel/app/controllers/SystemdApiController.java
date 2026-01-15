@@ -1,5 +1,7 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.web.methods.GET;
+import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.Service;
 import fr.kainovaii.unitpanel.app.repository.ServiceRepository;
 import fr.kainovaii.unitpanel.app.services.SystemdService;
@@ -21,35 +23,12 @@ public class SystemdApiController extends BaseController
 {
     private final ServiceRepository serviceRepository;
 
-    public SystemdApiController()
-    {
-        super();
-        initRoutes();
-        this.serviceRepository = new ServiceRepository();
-    }
+    public SystemdApiController() { this.serviceRepository = new ServiceRepository(); }
 
-    private void initRoutes()
-    {
-        post("/api/systemd/:unit/start", this::start);
-        post("/api/systemd/:unit/stop", this::stop);
-        get("/api/systemd/:unit/logs", this::logs);
-        get("/api/systemd/:unit/status", this::status);
-        get("/api/systemd/:unit/stats", this::stats);
-        get("/api/systemd/stats/total", this::totalStats);
-
-        get("/api/systemd/:unit/files", this::listFiles);
-        get("/api/systemd/:unit/file", this::getFile);
-        post("/api/systemd/:unit/file", this::saveFile);
-
-        get("/api/services", this::getAllServices);
-
-        get("/api/systemd/:unit/service-file", this::getServiceFile);
-        post("/api/systemd/:unit/service-file", this::updateServiceFile);
-    }
-
+    @POST("/api/systemd/:unit/start")
     private Object start(Request req, Response res)
     {
-        if (isLogged(req)) {if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}} else {requireToken(req, res);}
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
             
         String unit = req.params("unit");
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
@@ -58,6 +37,7 @@ public class SystemdApiController extends BaseController
         return success(res);
     }
 
+    @POST("/api/systemd/:unit/stop")
     private Object stop(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -68,6 +48,7 @@ public class SystemdApiController extends BaseController
         return success(res);
     }
 
+    @GET("/api/systemd/:unit/logs")
     private Object logs(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -78,6 +59,7 @@ public class SystemdApiController extends BaseController
         return SystemdService.logs(unit);
     }
 
+    @GET("/api/systemd/:unit/status")
     private Object status(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -89,6 +71,7 @@ public class SystemdApiController extends BaseController
         return "{\"status\":\"" + status + "\"}";
     }
 
+    @GET("/api/systemd/:unit/stats")
     private Object stats(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -106,6 +89,7 @@ public class SystemdApiController extends BaseController
         }
     }
 
+    @GET("/api/systemd/stats/total")
     private Object totalStats(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -136,6 +120,7 @@ public class SystemdApiController extends BaseController
         }
     }
 
+    @GET("/api/systemd/:unit/files")
     private Object listFiles(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -162,6 +147,7 @@ public class SystemdApiController extends BaseController
         }
     }
 
+    @GET("/api/systemd/:unit/file")
     private Object getFile(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -178,6 +164,7 @@ public class SystemdApiController extends BaseController
         }
     }
 
+    @POST("/api/systemd/:unit/file")
     private Object saveFile(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -198,25 +185,7 @@ public class SystemdApiController extends BaseController
         }
     }
 
-    private Object getAllServices(Request req, Response res)
-    {
-        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
-        try {
-            List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
-
-            res.type("application/json");
-            return new com.google.gson.Gson().toJson(Map.of(
-                    "success", true,
-                    "data", services,
-                    "total", services.size()
-            ));
-        } catch (Exception e) {
-            e.printStackTrace();
-            res.status(500);
-            return error(res, "Failed to fetch services: " + e.getMessage());
-        }
-    }
-
+    @GET("/api/systemd/:unit/service-file")
     private Object getServiceFile(Request req, Response res)
     {
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
@@ -237,6 +206,7 @@ public class SystemdApiController extends BaseController
         }
     }
 
+    @POST("/api/systemd/:unit/service-file")
     private Object updateServiceFile(Request req, Response res)
     {
         

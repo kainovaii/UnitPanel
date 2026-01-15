@@ -1,9 +1,9 @@
-{% extends "layout/admin.html" %}
+{% extends "layout/verticale.html" %}
 
 {% block content %}
 <div class="page-body">
     <div class="container-xxl">
-        <div class="page-header d-print-none mb-4">
+        <div class="page-header d-print-none mb-3">
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <div class="page-pretitle">
@@ -467,37 +467,4 @@ WantedBy=multi-user.target</code></pre>
         </div>
     </div>
 </div>
-
-<style>
-    code {
-        color: #e83e8c;
-        background-color: rgba(232, 62, 140, 0.1);
-        padding: 2px 6px;
-        border-radius: 3px;
-        font-size: 0.875em;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    }
-
-    pre code {
-        color: inherit;
-        background-color: transparent;
-        padding: 0;
-        font-size: 0.875rem;
-        line-height: 1.5;
-    }
-
-    pre {
-        margin: 0;
-        overflow-x: auto;
-    }
-
-    .bg-dark {
-        background-color: #0A1422 !important;
-    }
-
-    .badge {
-        color: white;
-    }
-</style>
-
 {% endblock %}

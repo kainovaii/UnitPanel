@@ -32,6 +32,5 @@ public class UserRepository
         return User.findFirst("username = ?", username);
     }
 
-
-    public static User findById(int id) { return User.findFirst("id = ?", id); }
+    public User findById(int id) { return User.findFirst("id = ?", id); }
 }

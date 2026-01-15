@@ -1,5 +1,7 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.web.methods.GET;
+import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.User;
 import fr.kainovaii.unitpanel.app.repository.UserRepository;
 import fr.kainovaii.core.database.DB;
@@ -20,18 +22,9 @@ public class LoginController extends BaseController
 {
     private final UserRepository userRepository;
 
-    public LoginController()
-    {
-        initRoutes();
-        this.userRepository = new UserRepository();
-    }
-    private void initRoutes()
-    {
-        get("/login", this::front);
-        post("/login", this::back);
-        get("/logout", this::logout);
-    }
+    public LoginController() { this.userRepository = new UserRepository(); }
 
+    @GET("login")
     private Object front(Request req, Response res)
     {
         if (!isLogged(req)) {
@@ -42,6 +35,7 @@ public class LoginController extends BaseController
         return null;
     }
 
+    @POST("login")
     private Object back(Request req, Response res)
     {
         String usernameParam = req.queryParams("username");
@@ -65,6 +59,7 @@ public class LoginController extends BaseController
         });
     }
 
+    @GET("logout")
     private Object logout(Request req, Response res)
     {
         Session session = req.session(true);

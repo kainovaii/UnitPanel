@@ -26,7 +26,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-12" x-show="alert.show" x-transition>
             <div class="alert" :class="alert.type === 'success' ? 'alert-success' : 'alert-danger'" role="alert">
                 <div class="d-flex">
@@ -34,13 +33,12 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-3 mb-3">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Files</h3>
                 </div>
-                <div class="list-group list-group-flush" style="max-height: 460px; overflow-y: auto;">
+                <div class="list-group list-group-flush" style="max-height: 500px; overflow-y: auto;">
                     <template x-if="loading">
                         <div class="text-center p-3">
                             <div class="spinner-border spinner-border-sm" role="status"></div>
@@ -67,9 +65,8 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-9">
-            <div class="card" style="max-height: 530px; overflow-y: auto;">
+            <div class="card" style="max-height: 520px; overflow-y: auto;">
                 <div class="card-header">
                     <h3 class="card-title">
                         <span x-show="!selectedFile">Select a file to edit</span>
@@ -128,7 +125,6 @@
                     }
                 });
             },
-
             async loadFileList() {
                 this.loading = true;
                 try {
@@ -148,7 +144,6 @@
                     this.loading = false;
                 }
             },
-
             async loadFile(filePath) {
                 try {
                     const response = await fetch(`/api/systemd/${this.unit}/file?path=${encodeURIComponent(filePath)}`);
@@ -166,7 +161,6 @@
                     this.showAlert('danger', 'Failed to load file: ' + error.message);
                 }
             },
-
             async saveFile() {
                 if (!this.selectedFile) return;
 
@@ -194,11 +188,9 @@
                     this.saving = false;
                 }
             },
-
             getFileName(path) {
                 return path.replace(this.baseDir + '/', '');
             },
-
             showAlert(type, message) {
                 this.alert = { show: true, type, message };
                 setTimeout(() => this.alert.show = false, 5000);

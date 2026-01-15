@@ -1,0 +1,31 @@
+{% for user in users %}
+<form class="offcanvas offcanvas-end offcanvas-narrow" tabindex="-1" id="editUserCanvas-{{ user.id }}" action="/admin/users/update" method="POST">
+    <div class="offcanvas-header">
+        <h2 class="offcanvas-title">Edit ({{ user.username }})</h2>
+        <button type="button" class="btn-delete text-danger" style="margin-right: 0;" data-bs-toggle="modal" data-bs-target="#deleteUserModal"></button>
+        <button type="button" class="btn-close" style="margin-left: 0;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <div>
+            <div class="form-group">
+                <label>Username</label>
+                <input class="form-control" type="text" name="username" value="{{ user.username }}">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" type="text" name="username" value="NaN" readonly>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select class="form-select" name="role">
+                    <option value="ADMIN">Admin</option>
+                    <option value="USER">User</option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-auto space-y">
+            <button type="submit" class="btn btn-primary w-100">Save</button>
+        </div>
+    </div>
+</form>
+{% endfor %}

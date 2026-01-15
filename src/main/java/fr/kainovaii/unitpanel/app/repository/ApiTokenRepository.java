@@ -11,8 +11,6 @@ import java.util.UUID;
 
 public class ApiTokenRepository
 {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     public ApiToken createToken(Long userId, int validityDays)
     {
         return DB.withConnection(() ->
