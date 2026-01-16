@@ -36,7 +36,7 @@ public class BaseController extends ApiResponse
         return DB.withConnection(() -> User.findById(session.attribute("id")));
     }
 
-    protected void requireLogin(Request req, Response res)
+    protected static void requireLogin(Request req, Response res)
     {
         if (!isLogged(req)) {
             res.redirect("/login");

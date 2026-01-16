@@ -18,6 +18,8 @@ public class ControllerLoader
 {
     public static void loadControllers()
     {
+        before("/*", RoleChecker::checkAccess);
+
         Reflections reflections = new Reflections("fr.kainovaii.unitpanel.app.controllers");
         Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(Controller.class);
 
@@ -77,8 +79,10 @@ public class ControllerLoader
 
     private static Route createRoute(Object controller, Method method)
     {
+
         return (req, res) -> {
             try {
+                RoleChecker.checkAccess(req, res);
                 method.setAccessible(true);
                 return method.invoke(controller, req, res);
             } catch (Exception e) {

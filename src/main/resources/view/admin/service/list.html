@@ -12,11 +12,9 @@
                         </div>
                         <div class="col-auto ms-auto d-print-none">
                             <div class="btn-list">
-                            <span class="d-none d-sm-inline">
-                                <a class="btn btn-md" data-bs-toggle="modal" data-bs-target="#createServiceModal" href="#">
-                                    New service
-                                </a>
-                            </span>
+                                <span class="d-none d-sm-inline">
+                                    <button class="btn btn-md" data-bs-toggle="offcanvas" data-bs-target="#createServiceCanvas" aria-controls="createServiceCanvas" aria-label="Service create">New service</button>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -133,7 +131,7 @@
             </div>
         </div>
     </div>
-    {% include "./partials/create-modal.html" %}
+    {% include "./partials/create-canvas.html" %}
 </div>
 <script>
     function systemdDashboard() {
