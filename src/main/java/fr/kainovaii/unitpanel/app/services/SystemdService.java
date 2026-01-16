@@ -17,30 +17,16 @@ public class SystemdService
 
     private static void validateUnitName(String unitName) throws SecurityException
     {
-        if (unitName == null || unitName.trim().isEmpty()) {
-            throw new SecurityException("Unit name cannot be null or empty");
-        }
-
+        if (unitName == null || unitName.trim().isEmpty()) { throw new SecurityException("Unit name cannot be null or empty"); }
         String cleanName = unitName.replace(".service", "");
-        if (!UNIT_NAME_PATTERN.matcher(cleanName).matches()) {
-            throw new SecurityException("Invalid unit name: " + unitName);
-        }
-
-        if (cleanName.length() > 255) {
-            throw new SecurityException("Unit name too long");
-        }
+        if (!UNIT_NAME_PATTERN.matcher(cleanName).matches()) { throw new SecurityException("Invalid unit name: " + unitName); }
+        if (cleanName.length() > 255) { throw new SecurityException("Unit name too long"); }
     }
 
     private static void validatePath(String path) throws SecurityException
     {
-        if (path == null || path.trim().isEmpty()) {
-            throw new SecurityException("Path cannot be null or empty");
-        }
-
-        if (PATH_TRAVERSAL_PATTERN.matcher(path).matches()) {
-            throw new SecurityException("Path traversal detected: " + path);
-        }
-
+        if (path == null || path.trim().isEmpty()) { throw new SecurityException("Path cannot be null or empty"); }
+        if (PATH_TRAVERSAL_PATTERN.matcher(path).matches()) { throw new SecurityException("Path traversal detected: " + path); }
         try {
             Path normalized = Paths.get(path).normalize();
             if (!normalized.toString().equals(path)) {
@@ -53,14 +39,10 @@ public class SystemdService
 
     private static void validateCommand(String command) throws SecurityException
     {
-        if (command == null || command.trim().isEmpty()) {
-            throw new SecurityException("Command cannot be null or empty");
-        }
+        if (command == null || command.trim().isEmpty()) { throw new SecurityException("Command cannot be null or empty"); }
 
-        if (command.contains(";") || command.contains("|") ||
-                command.contains("&") || command.contains("`") ||
-                command.contains("$(") || command.contains(">") ||
-                command.contains("<")) {
+        if (command.contains(";") || command.contains("|") || command.contains("&") || command.contains("`") || command.contains("$(") || command.contains(">") || command.contains("<"))
+        {
             throw new SecurityException("Dangerous characters detected in command");
         }
     }
@@ -107,34 +89,17 @@ public class SystemdService
     {
         validateUnitName(name);
         validateCommand(execStart);
-
-        if (workingDirectory != null) {
-            validatePath(workingDirectory);
-        }
-
-        if (user != null && !user.matches("^[a-z_][a-z0-9_-]*[$]?$")) {
-            throw new SecurityException("Invalid user name: " + user);
-        }
-
-        if (!name.endsWith(".service")) {
-            name = name + ".service";
-        }
-
-        String serviceContent = buildServiceContent(name, description, execStart,
-                workingDirectory, user);
-
+        if (workingDirectory != null) { validatePath(workingDirectory); }
+        if (user != null && !user.matches("^[a-z_][a-z0-9_-]*[$]?$")) { throw new SecurityException("Invalid user name: " + user); }
+        if (!name.endsWith(".service")) {  name = name + ".service"; }
+        String serviceContent = buildServiceContent(name, description, execStart, workingDirectory, user);
         File tempFile = File.createTempFile("service-", ".service");
         tempFile.deleteOnExit();
-
-        try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write(serviceContent);
-        }
-
+        try (FileWriter writer = new FileWriter(tempFile)) {  writer.write(serviceContent); }
         exec("sudo", "cp", tempFile.getAbsolutePath(), SYSTEMD_PATH + name);
         exec("sudo", "chmod", "644", SYSTEMD_PATH + name);
         exec("sudo", "systemctl", "daemon-reload");
         exec("sudo", "systemctl", "enable", name);
-
         Files.deleteIfExists(tempFile.toPath());
     }
 
@@ -142,39 +107,20 @@ public class SystemdService
     {
         validateUnitName(name);
 
-        if (!name.endsWith(".service")) {
-            name = name + ".service";
-        }
+        if (!name.endsWith(".service")) {  name = name + ".service"; }
 
         File serviceFile = new File(SYSTEMD_PATH + name);
-        if (!serviceFile.exists()) {
-            throw new IllegalStateException("Service does not exist: " + name);
-        }
+        if (!serviceFile.exists()) { throw new IllegalStateException("Service does not exist: " + name); }
 
         String existingContent = readFile(SYSTEMD_PATH + name);
 
-        if (description == null) {
-            description = extractValue(existingContent, "Description");
-        }
-        if (execStart == null) {
-            execStart = extractValue(existingContent, "ExecStart");
-        }
-        if (workingDirectory == null) {
-            workingDirectory = extractValue(existingContent, "WorkingDirectory");
-        }
-        if (user == null) {
-            user = extractValue(existingContent, "User");
-        }
-
-        if (execStart != null) {
-            validateCommand(execStart);
-        }
-        if (workingDirectory != null && !workingDirectory.isEmpty()) {
-            validatePath(workingDirectory);
-        }
-        if (user != null && !user.isEmpty() && !user.matches("^[a-z_][a-z0-9_-]*[$]?$")) {
-            throw new SecurityException("Invalid user name: " + user);
-        }
+        if (description == null) { description = extractValue(existingContent, "Description"); }
+        if (execStart == null) { execStart = extractValue(existingContent, "ExecStart"); }
+        if (workingDirectory == null) {  workingDirectory = extractValue(existingContent, "WorkingDirectory"); }
+        if (user == null) { user = extractValue(existingContent, "User"); }
+        if (execStart != null) { validateCommand(execStart); }
+        if (workingDirectory != null && !workingDirectory.isEmpty()) { validatePath(workingDirectory); }
+        if (user != null && !user.isEmpty() && !user.matches("^[a-z_][a-z0-9_-]*[$]?$")) { throw new SecurityException("Invalid user name: " + user); }
 
         try {
             stop(name);
@@ -182,15 +128,12 @@ public class SystemdService
             System.err.println("Warning: Could not stop service before update: " + e.getMessage());
         }
 
-        String serviceContent = buildServiceContent(name, description, execStart,
-                workingDirectory, user);
+        String serviceContent = buildServiceContent(name, description, execStart, workingDirectory, user);
 
         File tempFile = File.createTempFile("service-update-", ".service");
         tempFile.deleteOnExit();
 
-        try (FileWriter writer = new FileWriter(tempFile)) {
-            writer.write(serviceContent);
-        }
+        try (FileWriter writer = new FileWriter(tempFile)) { writer.write(serviceContent); }
 
         exec("sudo", "cp", tempFile.getAbsolutePath(), SYSTEMD_PATH + name);
         exec("sudo", "chmod", "644", SYSTEMD_PATH + name);
@@ -210,13 +153,9 @@ public class SystemdService
         content.append("Type=simple\n");
         content.append("ExecStart=").append(execStart).append("\n");
 
-        if (workingDirectory != null && !workingDirectory.isEmpty()) {
-            content.append("WorkingDirectory=").append(workingDirectory).append("\n");
-        }
+        if (workingDirectory != null && !workingDirectory.isEmpty()) { content.append("WorkingDirectory=").append(workingDirectory).append("\n"); }
 
-        if (user != null && !user.isEmpty()) {
-            content.append("User=").append(user).append("\n");
-        }
+        if (user != null && !user.isEmpty()) { content.append("User=").append(user).append("\n"); }
 
         content.append("Restart=on-failure\n");
         content.append("RestartSec=10s\n");
@@ -247,9 +186,7 @@ public class SystemdService
     {
         validateUnitName(name);
 
-        if (!name.endsWith(".service")) {
-            name = name + ".service";
-        }
+        if (!name.endsWith(".service")) { name = name + ".service"; }
 
         exec("sudo", "systemctl", "stop", name);
         exec("sudo", "systemctl", "disable", name);
@@ -272,14 +209,10 @@ public class SystemdService
             String pid = exec("sudo", "systemctl", "show", unit, "--property=MainPID").trim();
             pid = pid.replace("MainPID=", "");
 
-            if (pid.equals("0") || pid.isEmpty()) {
-                return new ServiceStats(0.0, 0.0, "0 B");
-            }
+            if (pid.equals("0") || pid.isEmpty()) { return new ServiceStats(0.0, 0.0, "0 B"); }
 
             String stats = exec("sudo", "ps", "-p", pid, "-o", "%cpu,%mem,rss", "--no-headers").trim();
-            if (stats.isEmpty()) {
-                return new ServiceStats(0.0, 0.0, "0 B");
-            }
+            if (stats.isEmpty()) { return new ServiceStats(0.0, 0.0, "0 B"); }
 
             String[] parts = stats.trim().split("\\s+");
             double cpu = Double.parseDouble(parts[0]);
@@ -355,9 +288,7 @@ public class SystemdService
             this.ram = ram;
         }
 
-        public String toJson() {
-            return String.format("{\"cpu\":%.2f,\"mem\":%.2f,\"ram\":\"%s\"}", cpu, memPercent, ram);
-        }
+        public String toJson() {  return String.format("{\"cpu\":%.2f,\"mem\":%.2f,\"ram\":\"%s\"}", cpu, memPercent, ram); }
     }
 
     public static String listFiles(String directory) throws Exception
@@ -424,5 +355,47 @@ public class SystemdService
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Failed to execute command: " + String.join(" ", cmd), e);
         }
+    }
+
+    public static void deleteFile(String filePath) throws Exception
+    {
+        validatePath(filePath);
+
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File does not exist: " + filePath);
+        }
+
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException("Cannot delete directories");
+        }
+
+        exec("sudo", "rm", "-f", filePath);
+    }
+
+    public static void uploadFile(String filePath, String content) throws Exception
+    {
+        validatePath(filePath);
+
+        if (content == null) {
+            throw new IllegalArgumentException("Content cannot be null");
+        }
+
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            exec("sudo", "mkdir", "-p", parentDir.getAbsolutePath());
+        }
+
+        writeFile(filePath, content);
+    }
+
+    public static String[] getDirectoryTreeWithFolders(String directory) throws Exception
+    {
+        validatePath(directory);
+        // Get all files and directories, excluding hidden ones
+        String output = exec("sudo", "find", directory, "-not", "-path", "*/.*", "-printf", "%y|%p\n");
+        return output.split("\n");
     }
 }

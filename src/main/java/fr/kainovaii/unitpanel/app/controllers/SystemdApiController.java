@@ -1,5 +1,6 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.web.methods.DELETE;
 import fr.kainovaii.core.web.methods.GET;
 import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.Service;
@@ -11,6 +12,7 @@ import fr.kainovaii.core.web.controller.Controller;
 import spark.Request;
 import spark.Response;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -126,22 +128,64 @@ public class SystemdApiController extends BaseController
         if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
 
         try {
-            List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream() .filter(s -> s.getUnit().equals(unit)) .toList() );
+            List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream()
+                    .filter(s -> s.getUnit().equals(unit))
+                    .toList()
+            );
 
             if (services.isEmpty()) { return error(res, "Service not found"); }
 
             Service service = services.get(0);
             String workDir = service.getWorkingDirectory();
 
-            if (workDir == null || workDir.isEmpty()) { return error(res, "No working directory configured"); }
+            if (workDir == null || workDir.isEmpty()) {
+                return error(res, "No working directory configured");
+            }
 
-            String[] files = SystemdService.getDirectoryTree(workDir);
+            String[] items = SystemdService.getDirectoryTreeWithFolders(workDir);
+
+            // Parse the output into a structured format
+            List<Map<String, Object>> tree = new java.util.ArrayList<>();
+            for (String item : items) {
+                if (item.trim().isEmpty()) continue;
+                String[] parts = item.split("\\|", 2);
+                if (parts.length != 2) continue;
+
+                String type = parts[0].equals("f") ? "file" : "directory";
+                String path = parts[1];
+
+                Map<String, Object> node = new java.util.HashMap<>();
+                node.put("path", path);
+                node.put("type", type);
+                node.put("name", new File(path).getName());
+                tree.add(node);
+            }
 
             res.type("application/json");
-            return new com.google.gson.Gson().toJson(Map.of("files", files, "baseDir", workDir));
+            return new com.google.gson.Gson().toJson(Map.of(
+                    "tree", tree,
+                    "baseDir", workDir
+            ));
         } catch (Exception e) {
             res.status(500);
             return error(res, "Failed to list files: " + e.getMessage());
+        }
+    }
+
+    @DELETE("/api/systemd/:unit/file")
+    private Object deleteFile(Request req, Response res)
+    {
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
+        String filePath = req.queryParams("path");
+        if (filePath == null || filePath.isEmpty()) return error(res, "Missing file path");
+
+        try {
+            SystemdService.deleteFile(filePath);
+            res.type("application/json");
+            return "{\"success\":true,\"message\":\"File deleted successfully\"}";
+        } catch (Exception e) {
+            res.status(500);
+            return "{\"success\":false,\"error\":\"" + e.getMessage() + "\"}";
         }
     }
 
@@ -227,6 +271,33 @@ public class SystemdApiController extends BaseController
         } catch (Exception e) {
             res.status(500);
             return error(res, "Failed to update service file: " + e.getMessage());
+        }
+    }
+
+    @POST("/api/systemd/:unit/upload")
+    private Object uploadFile(Request req, Response res)
+    {
+        if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
+
+        try {
+            com.google.gson.JsonObject json = new com.google.gson.JsonParser()
+                    .parse(req.body())
+                    .getAsJsonObject();
+
+            String filePath = json.get("path").getAsString();
+            String content = json.get("content").getAsString();
+
+            if (filePath == null || filePath.isEmpty()) {
+                return error(res, "Missing file path");
+            }
+
+            SystemdService.uploadFile(filePath, content);
+
+            res.type("application/json");
+            return "{\"success\":true,\"message\":\"File uploaded successfully\"}";
+        } catch (Exception e) {
+            res.status(500);
+            return "{\"success\":false,\"error\":\"" + e.getMessage() + "\"}";
         }
     }
 }
