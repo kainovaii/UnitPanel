@@ -76,6 +76,7 @@ public class ServiceController extends BaseController
         if (!name.endsWith(".service")) { unit = name + ".service".toLowerCase(); }
 
         try {
+            SystemdService.updateService(name, description, execStart, workingDirectory, "ubuntu");
             serviceRepository.update(id, name, description, execStart, workingDirectory, unit, true);
             return redirectWithFlash(req, res, "success", "Updating successfully", "/admin/services/" + id + "/console");
         } catch (RuntimeException e) {
