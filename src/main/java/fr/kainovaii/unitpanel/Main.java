@@ -1,6 +1,7 @@
 package fr.kainovaii.unitpanel;
 
 import fr.kainovaii.core.Spark;
+
 public class Main
 {
     public static void main(String[] args) throws Exception

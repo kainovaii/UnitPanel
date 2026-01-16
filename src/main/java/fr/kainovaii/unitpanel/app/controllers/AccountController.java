@@ -24,14 +24,8 @@ import static spark.Spark.post;
 @Controller
 public class AccountController extends BaseController
 {
-    private final UserRepository userRepository;
-    private final ApiTokenRepository apiTokenRepository;
-
-    public AccountController()
-    {
-        this.userRepository = new UserRepository();
-        this.apiTokenRepository = new ApiTokenRepository();
-    }
+    private final UserRepository userRepository = new UserRepository();
+    private final ApiTokenRepository apiTokenRepository = new ApiTokenRepository();
 
     @HasRole("DEFAULT")
     @GET("/account")

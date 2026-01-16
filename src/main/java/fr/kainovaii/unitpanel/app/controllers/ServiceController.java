@@ -12,6 +12,7 @@ import fr.kainovaii.core.web.controller.Controller;
 import spark.Request;
 import spark.Response;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,7 @@ import static spark.Spark.post;
 @Controller
 public class ServiceController extends BaseController
 {
-    private final ServiceRepository serviceRepository;
-
-    public ServiceController() { this.serviceRepository = new ServiceRepository(); }
+    private final ServiceRepository serviceRepository = new ServiceRepository();
 
     @HasRole("DEFAULT")
     @GET("/admin/services")
@@ -46,15 +45,15 @@ public class ServiceController extends BaseController
     @POST("/admin/services/create")
     private Object create(Request req, Response res) throws Exception
     {
+        String name = req.queryParams("name");
+        String description = req.queryParams("description");
+        String execStart = req.queryParams("execStart");
+        String workingDirectory = req.queryParams("workingDirectory");
+
+        String unit = name;
+        if (!name.endsWith(".service")) { unit = name + ".service".toLowerCase(); }
+
         try {
-            String name = req.queryParams("name").toLowerCase();
-            String description = req.queryParams("description");
-            String execStart = req.queryParams("execStart");
-            String workingDirectory = req.queryParams("workingDirectory");
-
-            String unit = name;
-            if (!name.endsWith(".service")) { unit = name + ".service"; }
-
             SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
             serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
 
@@ -68,34 +67,33 @@ public class ServiceController extends BaseController
     @POST("/admin/services/update")
     private Object update(Request req, Response res) throws Exception
     {
+        int id = Integer.parseInt(req.queryParams("id"));
+        String name = req.queryParams("name");
+        String description = req.queryParams("description");
+        String execStart = req.queryParams("execStart");
+        String workingDirectory = req.queryParams("workingDirectory");
+        String unit = name;
+        if (!name.endsWith(".service")) { unit = name + ".service".toLowerCase(); }
+
         try {
-            int id = Integer.parseInt(req.queryParams("id"));
-            String name = req.queryParams("name").toLowerCase();
-            String description = req.queryParams("description");
-            String execStart = req.queryParams("execStart");
-            String workingDirectory = req.queryParams("workingDirectory");
-
-            String unit = name;
-            if (!name.endsWith(".service")) { unit = name + ".service"; }
             serviceRepository.update(id, name, description, execStart, workingDirectory, unit, true);
-
             return redirectWithFlash(req, res, "success", "Updating successfully", "/admin/services/" + id + "/console");
         } catch (RuntimeException e) {
             return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");
         }
+
     }
 
     @HasRole("DEFAULT")
     @POST("/admin/services/delete")
     private Object delete(Request req, Response res) throws Exception
     {
-        try {
-            int id = Integer.parseInt(req.queryParams("id"));
-            String name = req.queryParams("name");
+        int id = Integer.parseInt(req.queryParams("id"));
+        String name = req.queryParams("name");
 
+        try {
             SystemdService.deleteService(name);
             DB.withConnection(() -> serviceRepository.deleteById(id));
-
             return redirectWithFlash(req, res, "success", "Service deleted successfully", "/admin/services");
         } catch (RuntimeException e) {
             return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");

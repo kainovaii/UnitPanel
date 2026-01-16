@@ -17,12 +17,7 @@ import static spark.Spark.*;
 @Controller
 public class ApiAuthController extends BaseController
 {
-    private final ApiTokenRepository apiTokenRepository;
-
-    public ApiAuthController()
-    {
-        this.apiTokenRepository = new ApiTokenRepository();
-    }
+    private final ApiTokenRepository apiTokenRepository = new ApiTokenRepository();
 
     @HasRole("DEFAULT")
     @POST("/api/auth/token")

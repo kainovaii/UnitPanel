@@ -21,9 +21,7 @@ import static spark.Spark.get;
 @Controller
 public class SystemdApiController extends BaseController
 {
-    private final ServiceRepository serviceRepository;
-
-    public SystemdApiController() { this.serviceRepository = new ServiceRepository(); }
+    private final ServiceRepository serviceRepository = new ServiceRepository();
 
     @POST("/api/systemd/:unit/start")
     private Object start(Request req, Response res)

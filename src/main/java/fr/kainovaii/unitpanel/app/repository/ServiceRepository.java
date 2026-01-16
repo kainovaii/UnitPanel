@@ -26,7 +26,6 @@ public class ServiceRepository
         return DB.withConnection(() ->
         {
             Service service = this.findById(id);
-            if (service == null) return false;
             service.setName(name);
             service.setDescription(description);
             service.setExecStart(execStart);

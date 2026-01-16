@@ -20,9 +20,7 @@ import static spark.Spark.get;
 @Controller
 public class UserController extends BaseController
 {
-    private final UserRepository userRepository;
-
-    public UserController() { this.userRepository = new UserRepository(); }
+    private final UserRepository userRepository = new UserRepository();
 
     @HasRole("ADMIN")
     @GET("/admin/users")

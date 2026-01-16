@@ -21,9 +21,7 @@ import static spark.Spark.post;
 @Controller
 public class LoginController extends BaseController
 {
-    private final UserRepository userRepository;
-
-    public LoginController() { this.userRepository = new UserRepository(); }
+    private final UserRepository userRepository = new UserRepository();
 
     @GET("login")
     private Object front(Request req, Response res)
