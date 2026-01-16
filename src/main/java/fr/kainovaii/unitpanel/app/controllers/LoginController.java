@@ -1,5 +1,6 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.security.HasRole;
 import fr.kainovaii.core.web.methods.GET;
 import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.User;
@@ -59,6 +60,7 @@ public class LoginController extends BaseController
         });
     }
 
+    @HasRole("DEFAULT")
     @GET("logout")
     private Object logout(Request req, Response res)
     {

@@ -1,5 +1,5 @@
 {% for user in users %}
-<div class="modal" id="deleteUserModal" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
+<div class="modal" id="deleteUserModal-{{ user.id }}" tabindex="-1" style="background: rgba(0, 0, 0, 0.5);">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

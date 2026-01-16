@@ -1,6 +1,7 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
 import fr.kainovaii.core.database.DB;
+import fr.kainovaii.core.security.HasRole;
 import fr.kainovaii.core.web.methods.DELETE;
 import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.core.web.controller.BaseController;
@@ -23,11 +24,10 @@ public class ApiAuthController extends BaseController
         this.apiTokenRepository = new ApiTokenRepository();
     }
 
+    @HasRole("DEFAULT")
     @POST("/api/auth/token")
     private Object generateToken(Request req, Response res)
     {
-        requireLogin(req, res);
-
         try {
             Long userId = getLoggedUser(req).getLongId();
 
@@ -46,6 +46,7 @@ public class ApiAuthController extends BaseController
         }
     }
 
+    @HasRole("DEFAULT")
     @DELETE("/api/auth/token")
     private Object removeToken(Request req, Response res)
     {
@@ -64,6 +65,7 @@ public class ApiAuthController extends BaseController
         }
     }
 
+    @HasRole("DEFAULT")
     @POST("/api/auth/token/:token/revoke")
     private Object revokeToken(Request req, Response res)
     {

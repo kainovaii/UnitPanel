@@ -1,5 +1,6 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.security.HasRole;
 import fr.kainovaii.core.web.methods.GET;
 import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.Service;
@@ -24,27 +25,27 @@ public class ServiceController extends BaseController
 
     public ServiceController() { this.serviceRepository = new ServiceRepository(); }
 
+    @HasRole("DEFAULT")
     @GET("/admin/services")
     private Object list(Request req, Response res)
     {
-        requireLogin(req, res);
         List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
         return render("admin/service/list.html", Map.of("services", services));
     }
 
+    @HasRole("DEFAULT")
     @GET("/admin/services/:id/console")
     private Object console(Request req, Response res)
     {
-        requireLogin(req, res);
         int id = Integer.parseInt(req.params("id"));
         Service service = DB.withConnection(() -> serviceRepository.findById(id));
         return render("admin/service/console.html", Map.of("service", service));
     }
 
+    @HasRole("DEFAULT")
     @POST("/admin/services/create")
     private Object create(Request req, Response res) throws Exception
     {
-        requireLogin(req, res);
         try {
             String name = req.queryParams("name").toLowerCase();
             String description = req.queryParams("description");
@@ -63,10 +64,10 @@ public class ServiceController extends BaseController
         }
     }
 
+    @HasRole("DEFAULT")
     @POST("/admin/services/update")
     private Object update(Request req, Response res) throws Exception
     {
-        requireLogin(req, res);
         try {
             int id = Integer.parseInt(req.queryParams("id"));
             String name = req.queryParams("name").toLowerCase();
@@ -84,10 +85,10 @@ public class ServiceController extends BaseController
         }
     }
 
+    @HasRole("DEFAULT")
     @POST("/admin/services/delete")
     private Object delete(Request req, Response res) throws Exception
     {
-        requireLogin(req, res);
         try {
             int id = Integer.parseInt(req.queryParams("id"));
             String name = req.queryParams("name");
@@ -101,10 +102,10 @@ public class ServiceController extends BaseController
         }
     }
 
+    @HasRole("DEFAULT")
     @GET("/admin/services/:id/editor")
     private Object editor(Request req, Response res)
     {
-        requireLogin(req, res);
         String id = req.params("id");
         try {
             List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream() .filter(s -> String.valueOf(s.getId()).equals(id)) .toList() );

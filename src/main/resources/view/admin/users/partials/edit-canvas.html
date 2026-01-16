@@ -2,14 +2,15 @@
 <form class="offcanvas offcanvas-end offcanvas-narrow" tabindex="-1" id="editUserCanvas-{{ user.id }}" action="/admin/users/update" method="POST">
     <div class="offcanvas-header">
         <h2 class="offcanvas-title">Edit ({{ user.username }})</h2>
-        <button type="button" class="btn-delete text-danger" style="margin-right: 0;" data-bs-toggle="modal" data-bs-target="#deleteUserModal"></button>
+        <button type="button" class="btn-delete text-danger" style="margin-right: 0;" data-bs-toggle="modal" data-bs-target="#deleteUserModal-{{ user.id }}"></button>
         <button type="button" class="btn-close" style="margin-left: 0;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
         <div>
+            <input type="hidden" name="id" value="{{ user.id }}">
             <div class="form-group">
                 <label>Username</label>
-                <input class="form-control" type="text" name="username" value="{{ user.username }}">
+                <input class="form-control" type="text" name="username" value="{{ user.username }}" required>
             </div>
             <div class="form-group">
                 <label>Email</label>
@@ -17,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label>Role</label>
-                <select class="form-select" name="role">
+                <select class="form-select" name="role" required>
                     <option value="ADMIN">Admin</option>
                     <option value="USER">User</option>
                 </select>

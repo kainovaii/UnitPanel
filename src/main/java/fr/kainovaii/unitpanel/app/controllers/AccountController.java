@@ -1,5 +1,6 @@
 package fr.kainovaii.unitpanel.app.controllers;
 
+import fr.kainovaii.core.security.HasRole;
 import fr.kainovaii.core.web.methods.GET;
 import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.ApiToken;
@@ -32,14 +33,15 @@ public class AccountController extends BaseController
         this.apiTokenRepository = new ApiTokenRepository();
     }
 
+    @HasRole("DEFAULT")
     @GET("/account")
     private Object settings(Request req, Response res)
     {
-        requireLogin(req, res);
         List<ApiToken> apiTokens = DB.withConnection(() -> apiTokenRepository.findByUserId(1L).stream().toList());
         return render("account/settings.html", Map.of("api_tokens", apiTokens));
     }
 
+    @HasRole("DEFAULT")
     @POST("/account")
     private Object updateUser(Request req, Response res)
     {

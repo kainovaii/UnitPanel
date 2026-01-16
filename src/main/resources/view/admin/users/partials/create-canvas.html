@@ -1,12 +1,32 @@
-<form class="offcanvas offcanvas-end offcanvas-narrow" tabindex="-1" id="createUserCanvas">
+<form class="offcanvas offcanvas-end offcanvas-narrow" tabindex="-1" id="createUserCanvas" action="/admin/users/create" method="POST">
     <div class="offcanvas-header">
         <h2 class="offcanvas-title">Create</h2>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
-
+        <div>
+            <div class="form-group">
+                <label>Username</label>
+                <input class="form-control" type="text" name="username" autocomplete="false">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" type="text" name="email" readonly autocomplete="false">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-control" type="password" name="password" autocomplete="false">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select class="form-select" name="role">
+                    <option value="ADMIN">Admin</option>
+                    <option value="DEFAULT">User</option>
+                </select>
+            </div>
+        </div>
         <div class="mt-auto space-y">
-            <a href="#" class="btn btn-primary w-100" data-bs-dismiss="offcanvas">Save</a>
+            <button type="submit" class="btn btn-primary w-100" data-bs-dismiss="offcanvas">Save</button>
         </div>
     </div>
 </form>
