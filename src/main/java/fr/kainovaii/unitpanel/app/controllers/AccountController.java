@@ -31,7 +31,8 @@ public class AccountController extends BaseController
     @GET("/account")
     private Object settings(Request req, Response res)
     {
-        List<ApiToken> apiTokens = DB.withConnection(() -> apiTokenRepository.findByUserId(1L).stream().toList());
+        Long userId = getLoggedUser(req).getLongId();
+        List<ApiToken> apiTokens = DB.withConnection(() -> apiTokenRepository.findByUserId(userId).stream().toList());
         return render("account/settings.html", Map.of("api_tokens", apiTokens));
     }
 
