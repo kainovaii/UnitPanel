@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://raw.githubusercontent.com/kainovaii/UnitPanel/refs/heads/main/src/main/resources/assets/img/logo-dark.png" alt="UnitPanel Logo" width="100"/>
+    <img src="https://raw.githubusercontent.com/kainovaii/UnitPanel/refs/heads/main/src/main/resources/assets/img/logo-dark.png" alt="UnitPanel Logo" width="200"/>
     <br />
 </h1>
 
