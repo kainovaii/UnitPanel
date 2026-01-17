@@ -280,23 +280,32 @@ public class SystemdApiController extends BaseController
         if (isLogged(req)) {requireLogin(req, res);} else {requireToken(req, res);}
 
         try {
+            String unit = req.params("unit");
+            if (unit == null || unit.isEmpty()) return error(res, "Missing unit parameter");
+
             com.google.gson.JsonObject json = new com.google.gson.JsonParser()
                     .parse(req.body())
                     .getAsJsonObject();
 
             String filePath = json.get("path").getAsString();
             String content = json.get("content").getAsString();
+            boolean isBinary = json.has("isBinary") && json.get("isBinary").getAsBoolean();
 
             if (filePath == null || filePath.isEmpty()) {
                 return error(res, "Missing file path");
             }
 
-            SystemdService.uploadFile(filePath, content);
+            if (isBinary) {
+                SystemdService.uploadBinaryFile(filePath, content);
+            } else {
+                SystemdService.uploadFile(filePath, content);
+            }
 
             res.type("application/json");
             return "{\"success\":true,\"message\":\"File uploaded successfully\"}";
         } catch (Exception e) {
             res.status(500);
+            res.type("application/json");
             return "{\"success\":false,\"error\":\"" + e.getMessage() + "\"}";
         }
     }

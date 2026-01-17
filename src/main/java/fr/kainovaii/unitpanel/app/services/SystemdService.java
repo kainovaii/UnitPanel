@@ -391,6 +391,34 @@ public class SystemdService
         writeFile(filePath, content);
     }
 
+    public static void uploadBinaryFile(String filePath, String base64Content) throws Exception
+    {
+        validatePath(filePath);
+
+        if (base64Content == null) {
+            throw new IllegalArgumentException("Content cannot be null");
+        }
+
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            exec("sudo", "mkdir", "-p", parentDir.getAbsolutePath());
+        }
+
+        byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64Content);
+
+        File tempFile = File.createTempFile("binary-upload-", ".tmp");
+        tempFile.deleteOnExit();
+
+        try (java.io.FileOutputStream fos = new java.io.FileOutputStream(tempFile)) {
+            fos.write(decodedBytes);
+        }
+
+        exec("sudo", "cp", tempFile.getAbsolutePath(), filePath);
+        Files.deleteIfExists(tempFile.toPath());
+    }
+
     public static String[] getDirectoryTreeWithFolders(String directory) throws Exception
     {
         validatePath(directory);
