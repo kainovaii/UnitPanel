@@ -39,7 +39,7 @@ public class BaseController extends ApiResponse
     protected static void requireLogin(Request req, Response res)
     {
         if (!isLogged(req)) {
-            res.redirect("/login");
+            res.redirect("/users/login");
             halt();
         }
     }

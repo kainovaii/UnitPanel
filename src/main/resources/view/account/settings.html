@@ -9,7 +9,7 @@
                         <h3 class="card-title">Settings</h3>
                     </div>
                     <div class="card-body">
-                        <form action="/account" method="POST">
+                        <form action="/users/my-account" method="POST">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div>
@@ -48,13 +48,13 @@
                                     <div x-data="{ viewToken: true }" class="input-group input-group-flat">
                                         <input :type="viewToken ? 'password' : 'text'" class="form-control" value="{{ token.getString('token') }}" readonly>
                                         <span class="input-group-text">
-                                                    <a class="link-secondary" @click="viewToken = !viewToken" style="background: transparent; border: none; cursor: pointer;" data-bs-toggle="tooltip" aria-label="View token" data-bs-original-title="View token" aria-describedby="viewtoken">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path> </svg>
-                                                    </a>
-                                                    <button type="submit" class="link-secondary" style="background: transparent; border: none;" data-bs-toggle="tooltip" aria-label="Delete token" data-bs-original-title="Delete token" aria-describedby="deletetoken">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"> <path d="M18 6l-12 12"></path> <path d="M6 6l12 12"></path> </svg>
-                                                    </button>
-                                                </span>
+                                            <a class="link-secondary" @click="viewToken = !viewToken" style="background: transparent; border: none; cursor: pointer;" data-bs-toggle="tooltip" aria-label="View token" data-bs-original-title="View token" aria-describedby="viewtoken">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"> <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path> <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path> </svg>
+                                            </a>
+                                            <button type="submit" class="link-secondary" style="background: transparent; border: none;" data-bs-toggle="tooltip" aria-label="Delete token" data-bs-original-title="Delete token" aria-describedby="deletetoken">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1"> <path d="M18 6l-12 12"></path> <path d="M6 6l12 12"></path> </svg>
+                                            </button>
+                                        </span>
                                     </div>
                                 </form>
                             </div>

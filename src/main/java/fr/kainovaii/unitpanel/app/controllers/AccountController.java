@@ -28,7 +28,7 @@ public class AccountController extends BaseController
     private final ApiTokenRepository apiTokenRepository = new ApiTokenRepository();
 
     @HasRole("DEFAULT")
-    @GET("/account")
+    @GET("/users/my-account")
     private Object settings(Request req, Response res)
     {
         Long userId = getLoggedUser(req).getLongId();
@@ -37,7 +37,7 @@ public class AccountController extends BaseController
     }
 
     @HasRole("DEFAULT")
-    @POST("/account")
+    @POST("/users/my-account")
     private Object updateUser(Request req, Response res)
     {
         Session session = req.session(true);
@@ -45,19 +45,23 @@ public class AccountController extends BaseController
         String newPassword = req.queryParams("password");
         String currentUsername = getLoggedUser(req).getUsername();
 
-        User user = DB.withConnection(() -> userRepository.findByUsername((currentUsername)));
+        try {
+            User user = DB.withConnection(() -> userRepository.findByUsername((currentUsername)));
 
-        final String finalUsername = (newUsername == null || newUsername.isEmpty()) ? user.getUsername() : newUsername;
-        final String finalPassword = (newPassword == null || newPassword.isEmpty()) ? user.getPassword() : BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            final String finalUsername = (newUsername == null || newUsername.isEmpty()) ? user.getUsername() : newUsername;
+            final String finalPassword = (newPassword == null || newPassword.isEmpty()) ? user.getPassword() : BCrypt.hashpw(newPassword, BCrypt.gensalt());
 
-        boolean updateUser = DB.withConnection(() -> userRepository.updateByUsername(currentUsername, finalUsername, finalPassword));
+            boolean updateUser = DB.withConnection(() -> userRepository.updateByUsername(currentUsername, finalUsername, finalPassword));
 
-        if (updateUser) {
-            session.attribute("username", finalUsername);
-            setFlash(req, "success", "Update success");
-        } else {setFlash(req, "error", "Update error");}
+            if (updateUser) {
+                session.attribute("username", finalUsername);
+                setFlash(req, "success", "Update success");
+            } else {setFlash(req, "error", "Update error");}
 
-        res.redirect("/account");
-        return null;
+            res.redirect("/users/my-account");
+            return null;
+        } catch (RuntimeException exception) {
+            return redirectWithFlash(req,  res, "error", exception.getMessage(), "/users/my-account");
+        }
     }
 }

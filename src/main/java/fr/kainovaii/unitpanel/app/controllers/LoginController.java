@@ -23,7 +23,7 @@ public class LoginController extends BaseController
 {
     private final UserRepository userRepository = new UserRepository();
 
-    @GET("login")
+    @GET("users/login")
     private Object front(Request req, Response res)
     {
         if (!isLogged(req)) {
@@ -34,7 +34,7 @@ public class LoginController extends BaseController
         return null;
     }
 
-    @POST("login")
+    @POST("users/login")
     private Object back(Request req, Response res)
     {
         String usernameParam = req.queryParams("username");
@@ -43,7 +43,8 @@ public class LoginController extends BaseController
 
         return DB.withConnection(() ->
         {
-            if (!UserRepository.userExist(usernameParam)) redirectWithFlash(req,  res, "error", "User not found", "/login");
+            if (!UserRepository.userExist(usernameParam))
+                redirectWithFlash(req,  res, "error", "User not found", "/users/login");
 
             User user = userRepository.findByUsername(usernameParam);
 
@@ -54,16 +55,16 @@ public class LoginController extends BaseController
                 res.redirect("/admin/services");
                 return true;
             }
-            return redirectWithFlash(req,  res, "error", "Incorect login", "/login");
+            return redirectWithFlash(req,  res, "error", "Incorect login", "/users/login");
         });
     }
 
     @HasRole("DEFAULT")
-    @GET("logout")
+    @GET("users/logout")
     private Object logout(Request req, Response res)
     {
         Session session = req.session(true);
         if (isLogged(req)) { session.invalidate(); }
-        return redirectWithFlash(req,  res, "success", "Success logout", "/login");
+        return redirectWithFlash(req,  res, "success", "Success logout", "/users/login");
     }
 }
