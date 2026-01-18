@@ -1,9 +1,22 @@
 {% for user in users %}
 <form class="offcanvas offcanvas-end offcanvas-narrow" tabindex="-1" id="editUserCanvas-{{ user.id }}" action="/admin/users/update" method="POST">
     <div class="offcanvas-header">
-        <h2 class="offcanvas-title">Edit ({{ user.username }})</h2>
-        <button type="button" class="btn-delete text-danger" style="margin-right: 0;" data-bs-toggle="modal" data-bs-target="#deleteUserModal-{{ user.id }}"></button>
-        <button type="button" class="btn-close" style="margin-left: 0;" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <div class="d-flex">
+                <button disabled class="btn btn-md btn-icon" style="border-radius: 100%">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-users"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path></svg>
+                </button>
+                <h2 class="offcanvas-title">Edit ({{ user.username }})</h2>
+            </div>
+            <div>
+                <a class="btn btn btn-outline btn-danger btn-md btn-icon" style="border-radius: 100% " data-bs-toggle="modal" data-bs-target="#deleteUserModal-{{ user.id }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1 icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                </a>
+                <button class="btn btn-primary btn-md btn-icon" style="border-radius: 100%">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-check"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M5 12l5 5l10 -10" /> </svg>
+                </button>
+            </div>
+        </div>
     </div>
     <div class="offcanvas-body d-flex flex-column">
         <div>
@@ -23,9 +36,6 @@
                     <option value="USER">User</option>
                 </select>
             </div>
-        </div>
-        <div class="mt-auto space-y">
-            <button type="submit" class="btn btn-primary w-100">Save</button>
         </div>
     </div>
 </form>

@@ -4,7 +4,9 @@ import fr.kainovaii.core.security.HasRole;
 import fr.kainovaii.core.web.methods.GET;
 import fr.kainovaii.core.web.methods.POST;
 import fr.kainovaii.unitpanel.app.models.Service;
+import fr.kainovaii.unitpanel.app.models.User;
 import fr.kainovaii.unitpanel.app.repository.ServiceRepository;
+import fr.kainovaii.unitpanel.app.repository.UserRepository;
 import fr.kainovaii.unitpanel.app.services.SystemdService;
 import fr.kainovaii.core.database.DB;
 import fr.kainovaii.core.web.controller.BaseController;
@@ -15,20 +17,28 @@ import spark.Response;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 @Controller
 public class ServiceController extends BaseController
 {
     private final ServiceRepository serviceRepository = new ServiceRepository();
+    private final UserRepository userRepository = new UserRepository();
+    List<Service> services;
 
     @HasRole("DEFAULT")
     @GET("/admin/services")
     private Object list(Request req, Response res)
     {
-        List<Service> services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
+        User user = getLoggedUser(req);
+
+        if (user.getRole().equals("ADMIN")) {
+             services = DB.withConnection(() -> serviceRepository.getAll().stream().toList());
+        } else {
+            services = DB.withConnection(() -> serviceRepository.findByUser(user.getUsername()).stream().toList());
+        }
         return render("admin/service/list.html", Map.of("services", services));
     }
 
@@ -36,9 +46,16 @@ public class ServiceController extends BaseController
     @GET("/admin/services/:id/console")
     private Object console(Request req, Response res)
     {
+        User user = getLoggedUser(req);
         int id = Integer.parseInt(req.params("id"));
         Service service = DB.withConnection(() -> serviceRepository.findById(id));
-        return render("admin/service/console.html", Map.of("service", service));
+        List<String> users = service.getUsers();
+        if (!serviceRepository.userHasService(service, user.getUsername())) res.redirect("/");
+
+        List<User> globalUsers = DB.withConnection(() -> userRepository.getAll().stream().toList());
+        List<User> availableUsers = globalUsers.stream().filter(u -> !users.contains(u.getUsername())).toList();
+
+        return render("admin/service/console.html", Map.of("service", service, "users", users, "availableUsers", availableUsers));
     }
 
     @HasRole("DEFAULT")
@@ -49,13 +66,14 @@ public class ServiceController extends BaseController
         String description = req.queryParams("description");
         String execStart = req.queryParams("execStart");
         String workingDirectory = req.queryParams("workingDirectory");
-
+        String[] users = req.queryParamsValues("users");
         String unit = name;
+
         if (!name.endsWith(".service")) { unit = name + ".service".toLowerCase(); }
 
         try {
             SystemdService.createService(name, description, execStart, workingDirectory, "ubuntu");
-            serviceRepository.create(name, description, execStart, workingDirectory, unit, true);
+            serviceRepository.create(name, description, execStart, workingDirectory, unit, Arrays.toString(users), true);
 
             return redirectWithFlash(req, res, "success", "Service created successfully", "/admin/services");
         } catch (RuntimeException e) {
@@ -72,12 +90,13 @@ public class ServiceController extends BaseController
         String description = req.queryParams("description");
         String execStart = req.queryParams("execStart");
         String workingDirectory = req.queryParams("workingDirectory");
+        String[] users = req.queryParamsValues("users");
         String unit = name;
         if (!name.endsWith(".service")) { unit = name + ".service".toLowerCase(); }
 
         try {
             SystemdService.updateService(name, description, execStart, workingDirectory, "ubuntu");
-            serviceRepository.update(id, name, description, execStart, workingDirectory, unit, true);
+            serviceRepository.update(id, name, description, execStart, workingDirectory, unit, Arrays.toString(users),true);
             return redirectWithFlash(req, res, "success", "Updating successfully", "/admin/services/" + id + "/console");
         } catch (RuntimeException e) {
             return redirectWithFlash(req, res, "error", e.getMessage(), "/admin/services");

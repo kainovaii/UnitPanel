@@ -50,6 +50,7 @@ public class SQLite
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
+            email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
             role TEXT NOT NULL
         )
@@ -62,6 +63,7 @@ public class SQLite
             workingDirectory TEXT NOT NULL UNIQUE,
             unit TEXT NOT NULL UNIQUE,
             description TEXT,
+            users TEXT,
             autostart BOOLEAN DEFAULT 0
         );
         """);

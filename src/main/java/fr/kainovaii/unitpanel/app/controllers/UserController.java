@@ -35,11 +35,12 @@ public class UserController extends BaseController
     private Object create(Request req, Response res)
     {
         String username = req.queryParams("username");
+        String email = req.queryParams("email");
         String role = req.queryParams("role");
         String password = BCrypt.hashpw(req.queryParams("password"), BCrypt.gensalt(12));
 
         try {
-            userRepository.create(username, password, role);
+            userRepository.create(username, email, password, role);
         } catch (RuntimeException exception) {
             return redirectWithFlash(req, res, "error", exception.getMessage(), "/admin/users");
         }

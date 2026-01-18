@@ -115,6 +115,7 @@
                                 <td>Save a file</td>
                                 <td><a href="#endpoint-save-file">View</a></td>
                             </tr>
+                            {% if loggedUser.role == "ADMIN" %}
                             <tr>
                                 <td><span class="badge bg-blue">GET</span></td>
                                 <td><code>/api/systemd/:unit/service-file</code></td>
@@ -127,6 +128,7 @@
                                 <td>Update a .service file</td>
                                 <td><a href="#endpoint-service-file-update">View</a></td>
                             </tr>
+                            {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -398,7 +400,7 @@ Jan 12 10:30:01 server nginx[1234]: nginx started</code></pre>
                     </div>
                 </div>
             </div>
-
+            {% if loggedUser.role == "ADMIN" %}
             <!-- GET /api/systemd/:unit/service-file -->
             <div class="col-lg-6" id="endpoint-service-file-get">
                 <div class="card">
@@ -463,7 +465,7 @@ WantedBy=multi-user.target</code></pre>
                     </div>
                 </div>
             </div>
-
+            {% endif %}
         </div>
     </div>
 </div>

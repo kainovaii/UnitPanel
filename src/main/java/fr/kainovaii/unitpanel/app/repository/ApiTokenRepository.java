@@ -15,12 +15,11 @@ public class ApiTokenRepository
     {
         return DB.withConnection(() ->
         {
-            ApiToken token = new ApiToken();
             LocalDateTime expires = LocalDateTime.now().plusDays(validityDays);
-
-            token.set("token", UUID.randomUUID().toString());
-            token.set("user_id", userId);
-            token.set("expires_at", expires);
+            ApiToken token = new ApiToken();
+            token.setToken(UUID.randomUUID().toString());
+            token.setUserId(userId);
+            token.setExpiresAt(expires);
             token.saveIt();
             return token;
         });
@@ -32,6 +31,8 @@ public class ApiTokenRepository
 
     public void deleteExpiredTokens() { ApiToken.delete("expires_at < datetime('now')"); }
 
+    public void revokeAllUserTokens(Long userId) { ApiToken.delete("user_id = ?", userId); }
+
     public void revokeToken(String tokenValue)
     {
         ApiToken token = findByToken(tokenValue);
@@ -39,6 +40,4 @@ public class ApiTokenRepository
             token.delete();
         }
     }
-
-    public void revokeAllUserTokens(Long userId) { ApiToken.delete("user_id = ?", userId); }
 }

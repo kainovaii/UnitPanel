@@ -8,7 +8,7 @@ public class Setting extends Model
         return getBoolean("admin_exist");
     }
 
-    public void setAdminExist(String admin_exist) {
+    public void setAdminExist(int admin_exist) {
         set("admin_exist", admin_exist);
     }
 }

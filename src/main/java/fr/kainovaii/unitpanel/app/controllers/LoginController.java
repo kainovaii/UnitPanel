@@ -24,7 +24,7 @@ public class LoginController extends BaseController
     private final UserRepository userRepository = new UserRepository();
 
     @GET("users/login")
-    private Object front(Request req, Response res)
+    private Object loginFront(Request req, Response res)
     {
         if (!isLogged(req)) {
             return render("account/login.html", Map.of());
@@ -35,28 +35,30 @@ public class LoginController extends BaseController
     }
 
     @POST("users/login")
-    private Object back(Request req, Response res)
+    private Object loginBack(Request req, Response res)
     {
         String usernameParam = req.queryParams("username");
         String passwordParam = req.queryParams("password");
         Session session = req.session(true);
-
-        return DB.withConnection(() ->
-        {
-            if (!UserRepository.userExist(usernameParam))
-                redirectWithFlash(req,  res, "error", "User not found", "/users/login");
-
-            User user = userRepository.findByUsername(usernameParam);
-
-            if (BCrypt.checkpw(passwordParam, user.getPassword()))
+        try {
+            return DB.withConnection(() ->
             {
-                session.attribute("logged", true);
-                session.attribute("id", user.getId());
-                res.redirect("/admin/services");
-                return true;
-            }
-            return redirectWithFlash(req,  res, "error", "Incorect login", "/users/login");
-        });
+                if (!UserRepository.userExist(usernameParam)) redirectWithFlash(req,  res, "error", "User not found", "/users/login");
+
+                User user = userRepository.findByUsername(usernameParam);
+
+                if (BCrypt.checkpw(passwordParam, user.getPassword()))
+                {
+                    session.attribute("logged", true);
+                    session.attribute("id", user.getId());
+                    res.redirect("/admin/services");
+                    return true;
+                }
+                return redirectWithFlash(req,  res, "error", "Incorect login", "/users/login");
+            });
+        } catch (RuntimeException exception) {
+            return redirectWithFlash(req,  res, "error", exception.getMessage(), "/users/login");
+        }
     }
 
     @HasRole("DEFAULT")

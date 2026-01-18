@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>UnitPanel | Dashboard</title>
-    <link rel="icon" href="/assets/img/favicon.png" type="image/x-icon" />
-    <link href="/assets/css/tabler.css?v=1.6" rel="stylesheet" />
+    <link rel="icon" href="/assets/img/favicon-dark.png" type="image/x-icon" />
+    <link href="/assets/css/tabler.css?v=1.15" rel="stylesheet" />
     <style>@import url("https://rsms.me/inter/inter.css");</style>
     <script defer src="/assets/js/app.js"></script>
 </head>
@@ -28,6 +28,7 @@
                             <span class="nav-link-title">Dashboard</span>
                         </a>
                     </li>
+                    {% if loggedUser.role == "ADMIN" %}
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/users">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -36,6 +37,7 @@
                             <span class="nav-link-title">Users Management</span>
                         </a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/api">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">

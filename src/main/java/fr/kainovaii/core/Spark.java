@@ -75,12 +75,12 @@ public class Spark
         }
 
         if (!adminExist && !UserRepository.userExist("admin")) {
-            userRepository.create("admin", "$2a$12$8oYepa4rQw2xixu1KpvTbeg9aVAifZCUZGhn5/rfE7ugjqk9SXi5q", "ADMIN");
+            userRepository.create("admin","admin@email.com", "$2a$12$8oYepa4rQw2xixu1KpvTbeg9aVAifZCUZGhn5/rfE7ugjqk9SXi5q", "ADMIN");
             if (settings.isEmpty()) {
-                settingRepository.create(true);
+                settingRepository.create(1);
             } else {
                 Setting setting = settings.get(0);
-                setting.set("admin_exist", true);
+                setting.set("admin_exist", 1);
                 setting.saveIt();
             }
         }

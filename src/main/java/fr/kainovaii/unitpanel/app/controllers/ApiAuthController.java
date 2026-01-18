@@ -18,6 +18,7 @@ import static spark.Spark.*;
 public class ApiAuthController extends BaseController
 {
     private final ApiTokenRepository apiTokenRepository = new ApiTokenRepository();
+    private final String userAccountUrl = "/users/my-account";
 
     @HasRole("DEFAULT")
     @POST("/api/auth/token")
@@ -25,19 +26,10 @@ public class ApiAuthController extends BaseController
     {
         try {
             Long userId = getLoggedUser(req).getLongId();
-
-            ApiToken token = DB.withConnection(() -> apiTokenRepository.createToken(userId, 365));
-
-            res.type("application/json");
-            res.redirect("/account");
-            return new com.google.gson.Gson().toJson(Map.of(
-                "success", true,
-                "token", token.getToken(),
-                "expiresAt", token.getExpiresAt().toString()
-            ));
-        } catch (Exception e) {
-            res.status(500);
-            return error(res, "Failed to generate token: " + e.getMessage());
+            DB.withConnection(() -> apiTokenRepository.createToken(userId, 365));
+            return redirectWithFlash(req, res, "success", "Successful create token", userAccountUrl);
+        } catch (Exception exception) {
+            return redirectWithFlash(req, res, "error", exception.getMessage(), userAccountUrl);
         }
     }
 
@@ -66,17 +58,10 @@ public class ApiAuthController extends BaseController
     {
         try {
             String token = req.params(":token");
-
-            DB.withConnection(() -> {
-                apiTokenRepository.revokeToken(token);
-                return null;
-            });
-
-            res.redirect("/account");
-            return null;
-        } catch (Exception e) {
-            res.status(500);
-            return error(res, "Failed to revoke token: " + e.getMessage());
+            DB.withConnection(() -> { apiTokenRepository.revokeToken(token); return null; });
+            return redirectWithFlash(req, res, "success", "Successful revoke token", userAccountUrl);
+        } catch (Exception exception) {
+            return redirectWithFlash(req, res, "error", exception.getMessage(), userAccountUrl);
         }
     }
 }
