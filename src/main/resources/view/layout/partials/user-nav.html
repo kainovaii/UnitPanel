@@ -20,7 +20,12 @@
         <div class="d-none d-xl-block ps-2">
             <div><span>{{ loggedUser.username }}</span></div>
             <div class="mt-1 small">
-                <span>{{ loggedUser.role }}</span>
+                {% if loggedUser.role == "ADMIN" %}
+                <span>Admin</span>
+                {% endif %}
+                {% if loggedUser.role == "DEFAULT" %}
+                <span>User</span>
+                {% endif %}
             </div>
         </div>
     </a>

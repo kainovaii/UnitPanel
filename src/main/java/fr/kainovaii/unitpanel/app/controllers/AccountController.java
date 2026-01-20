@@ -44,15 +44,11 @@ public class AccountController extends BaseController
         String newUsername = req.queryParams("username");
         String newPassword = req.queryParams("password");
         String currentUsername = getLoggedUser(req).getUsername();
-
         try {
             User user = DB.withConnection(() -> userRepository.findByUsername((currentUsername)));
-
             final String finalUsername = (newUsername == null || newUsername.isEmpty()) ? user.getUsername() : newUsername;
             final String finalPassword = (newPassword == null || newPassword.isEmpty()) ? user.getPassword() : BCrypt.hashpw(newPassword, BCrypt.gensalt());
-
             boolean updateUser = DB.withConnection(() -> userRepository.updateByUsername(currentUsername, finalUsername, finalPassword));
-
             if (updateUser) {
                 session.attribute("username", finalUsername);
                 setFlash(req, "success", "Update success");

@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface DELETE
 {
     String value();
+    String name() default "";
 }

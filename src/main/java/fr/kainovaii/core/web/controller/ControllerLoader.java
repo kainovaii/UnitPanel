@@ -2,6 +2,7 @@ package fr.kainovaii.core.web.controller;
 
 import fr.kainovaii.core.security.HasRole;
 import fr.kainovaii.core.security.RoleChecker;
+import fr.kainovaii.core.web.RouteRegistry;
 import fr.kainovaii.core.web.methods.DELETE;
 import fr.kainovaii.core.web.methods.GET;
 import fr.kainovaii.core.web.methods.POST;
@@ -47,6 +48,8 @@ public class ControllerLoader
                 {
                     GET getAnnotation = method.getAnnotation(GET.class);
                     String path = getAnnotation.value();
+                    String name = getAnnotation.name();
+                    RouteRegistry.registerNamedRoute(name, path);
                     if (method.isAnnotationPresent(HasRole.class)) {
                         HasRole roleAnnotation = method.getAnnotation(HasRole.class);
                         RoleChecker.registerPathWithRole(path, roleAnnotation.value());
@@ -57,6 +60,8 @@ public class ControllerLoader
                 {
                     POST postAnnotation = method.getAnnotation(POST.class);
                     String path = postAnnotation.value();
+                    String name = postAnnotation.name();
+                    RouteRegistry.registerNamedRoute(name, path);
                     if (method.isAnnotationPresent(HasRole.class)) {
                         HasRole roleAnnotation = method.getAnnotation(HasRole.class);
                         RoleChecker.registerPathWithRole(path, roleAnnotation.value());
@@ -67,12 +72,15 @@ public class ControllerLoader
                 {
                     DELETE deleteAnnotation = method.getAnnotation(DELETE.class);
                     String path = deleteAnnotation.value();
+                    String name = deleteAnnotation.name();
+                    RouteRegistry.registerNamedRoute(name, path);
                     if (method.isAnnotationPresent(HasRole.class)) {
                         HasRole roleAnnotation = method.getAnnotation(HasRole.class);
                         RoleChecker.registerPathWithRole(path, roleAnnotation.value());
                     }
                     delete(path, createRoute(controller, method));
                 }
+
             }
         }
     }
